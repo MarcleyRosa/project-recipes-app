@@ -4,7 +4,7 @@ function Login() {
   return (
     <div>
       <label htmlFor="email">
-        Email
+        Email.
         <input type="text" data-testid="email-input" id="email" />
       </label>
 
