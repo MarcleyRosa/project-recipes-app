@@ -4,9 +4,15 @@ import RecipesContext from './RecipesContext';
 
 function RecipesProvider({ children }) {
   const [state, setState] = useState('');
-  const [inputPassword, setInputPassword] = useState();
+  const [inputPassword, setInputPassword] = useState('');
+  const [inputEmail, setInputEmail] = useState('');
 
-  const contextType = { state, setState, inputPassword, setInputPassword }
+  const contextType = { state,
+    setState,
+    inputPassword,
+    setInputPassword,
+    setInputEmail,
+    inputEmail };
 
   return (
     <RecipesContext.Provider value={ contextType }>

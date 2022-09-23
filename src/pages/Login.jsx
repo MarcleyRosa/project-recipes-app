@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import RecipesContext from '../context/RecipesContext';
 
 const MIN_LENGTH = 6;
@@ -10,11 +10,11 @@ function Login() {
     setInputEmail,
     setInputPassword } = useContext(RecipesContext);
 
-  const isButtonDisabled = ({ target }) => {
-    const validPassword = inputPassword.length >= MIN_LENGTH;
+  useEffect(() => {
+    const validPassword = inputPassword.length > MIN_LENGTH;
     const validEmail = (/\S+@\S+\.\S+/).test(inputEmail);
     if (validEmail && validPassword) setIsDisable(false);
-  };
+  }, [inputEmail, inputPassword]);
 
   return (
     <div>
@@ -22,7 +22,7 @@ function Login() {
         Email
         <input
           value={ inputEmail }
-          onChange={ isButtonDisabled }
+          onChange={ ({ target: { value } }) => setInputEmail(value) }
           type="text"
           data-testid="email-input"
           id="email"
@@ -33,7 +33,7 @@ function Login() {
         Senha
         <input
           value={ inputPassword }
-          onChange={ isButtonDisabled }
+          onChange={ ({ target: { value } }) => setInputPassword(value) }
           type="password"
           data-testid="password-input"
           id="password"
