@@ -7,9 +7,14 @@ import RecipesProvider from './context/RecipesProvider';
 
 function App() {
   return (
+<<<<<<< HEAD
     <RecipesProvider>
       <div className="meals">
         {/* <span className="logo">TRYBE</span>
+=======
+    <div className="meals">
+      <span className="logo">TRYBE 2.0</span>
+>>>>>>> origin
       <object
         className="rocksGlass"
         type="image/svg+xml"
