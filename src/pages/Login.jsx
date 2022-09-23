@@ -10,6 +10,14 @@ function Login() {
     setInputEmail,
     setInputPassword } = useContext(RecipesContext);
 
+  const handleClick = () => {
+    localStorage.setItem('user', JSON.stringify({ email: inputEmail }));
+    localStorage.setItem('mealsToken', '1');
+    localStorage.setItem('drinksToken', '1');
+    setInputEmail('');
+    setInputPassword('');
+  };
+
   useEffect(() => {
     const validPassword = inputPassword.length > MIN_LENGTH;
     const validEmail = (/\S+@\S+\.\S+/).test(inputEmail);
@@ -40,7 +48,12 @@ function Login() {
         />
       </label>
 
-      <button type="button" data-testid="login-submit-btn" disabled={ isDisable }>
+      <button
+        onClick={ handleClick }
+        type="button"
+        data-testid="login-submit-btn"
+        disabled={ isDisable }
+      >
         Enter
       </button>
     </div>
