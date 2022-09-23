@@ -1,25 +1,28 @@
 import propTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RecipesContext from './RecipesContext';
 
 function RecipesProvider({ children }) {
-  const [state, setState] = useState('');
+  const [inputEmail, setInputEmail] = useState();
+  const [inputPassword, setInputPassword] = useState();
 
   const contextType = {
-    state,
-    setState,
+    inputEmail,
   };
+
+  useEffect(() => {
+
+  }, [inputEmail]);
 
   return (
     <RecipesContext.Provider value={ contextType }>
       {children}
     </RecipesContext.Provider>
-
   );
 }
-
-export default RecipesProvider;
 
 RecipesProvider.propTypes = {
   children: propTypes.node.isRequired,
 };
+
+export default RecipesProvider;
