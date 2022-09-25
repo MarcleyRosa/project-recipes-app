@@ -10,7 +10,9 @@ function Header({ headers, isRoute }) {
       <Link to="/profile">
         <img data-testid="profile-top-btn" src={ profileIcon } alt="" />
       </Link>
-      { isRoute && <img data-testid="search-top-btn" src={ searchIcon } alt="" /> }
+      <Link to="/search">
+        { isRoute && <img data-testid="search-top-btn" src={ searchIcon } alt="" /> }
+      </Link>
     </div>
   );
 }
