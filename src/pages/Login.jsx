@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
 
 const MIN_LENGTH = 6;
 
 function Login() {
+  const history = useHistory();
   const [isDisable, setIsDisable] = useState(true);
   const { inputEmail,
     inputPassword,
@@ -16,6 +18,7 @@ function Login() {
     localStorage.setItem('drinksToken', '1');
     setInputEmail('');
     setInputPassword('');
+    history.push('/meals');
   };
 
   useEffect(() => {
