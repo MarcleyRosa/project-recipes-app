@@ -51,5 +51,6 @@ describe('Testa a aplicação', () => {
     userEvent.type(inputSearch, 'rice');
     userEvent.click(ingredientRadio);
     userEvent.click(sendButton);
+    expect(sendButton).toBeInTheDocument();
   });
 });
