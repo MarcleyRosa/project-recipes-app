@@ -9,8 +9,6 @@ function RecipesProvider({ children }) {
   const [searchInput, setSearchInput] = useState('a');
   const [urlSelect, setUrlSelect] = useState('');
 
-  console.log(searchInput);
-
   const contextType = { state,
     setState,
     inputPassword,
