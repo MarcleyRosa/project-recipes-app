@@ -1,31 +1,60 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
 
-function SearchBar({ request }) {
-  const { setUrlSelect, searchInput } = useContext(RecipesContext);
+function SearchBar({ domain, typeAPI }) {
+  const { setUrlSelect, searchInput, urlSelect,
+    setRequestAPI, requestAPI } = useContext(RecipesContext);
   const [nameSearch, setNameSearch] = useState('name');
+  const [isRequest, setIsRequest] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     switch (nameSearch) {
     case 'ingredient':
-      setUrlSelect('https://www.themealdb.com/api/json/v1/1/filter.php?i=');
+      setUrlSelect(`https://www.${domain}.com/api/json/v1/1/filter.php?i=`);
       break;
     case 'name':
-      setUrlSelect('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?s=`);
       break;
     case 'first-letter':
-      setUrlSelect('https://www.themealdb.com/api/json/v1/1/search.php?f=');
+      setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?f=`);
       break;
     default: break;
     }
   }, [nameSearch]);
 
+  useEffect(() => {
+    const fetchApi = async () => {
+      if (urlSelect.length && searchInput.length) {
+        const response = await fetch(`${urlSelect}${searchInput}`);
+        const json = await response.json();
+        if (json.meals || json.drinks) setRequestAPI(json);
+      }
+      if (requestAPI[typeAPI].length === 1) {
+        const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
+        history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
+      }
+    };
+    fetchApi();
+  }, [isRequest]);
+
+  useEffect(() => {
+    if (requestAPI[typeAPI].length === 1) {
+      const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
+      history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
+    }
+  }, [isRequest, requestAPI]);
+
   const handleClick = () => {
     if (nameSearch === 'first-letter' && searchInput.length > 1) {
       return global.alert('Your search must have only 1 (one) character');
     }
-    return request((prevState) => !prevState);
+    if (requestAPI[typeAPI].length === 0) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+    return setIsRequest((prevState) => !prevState);
   };
 
   return (
@@ -75,7 +104,8 @@ function SearchBar({ request }) {
 }
 
 SearchBar.propTypes = {
-  request: PropTypes.func.isRequired,
+  domain: PropTypes.string.isRequired,
+  typeAPI: PropTypes.string.isRequired,
 };
 
 export default SearchBar;
