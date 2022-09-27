@@ -1,11 +1,19 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+import { mealIngredients } from '../../cypress/mocks/japaneseMeals';
+import renderWith from './helpers/renderWith';
+
+/* const alert = global.alert('Sorry, we haven\'t found any recipes for these filters.'); */
 
 describe('Testa a aplicação', () => {
-  test('Tela de login', () => {
-    render(<App />);
+  test('Tela de login', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mealIngredients),
+    });
+    renderWith(<App />);
     const inputEmailElement = screen.getByTestId('email-input');
     const inputPasswordElement = screen.getByTestId('password-input');
     const buttonElement = screen.getByRole('button', { name: /Enter/i });
@@ -40,17 +48,9 @@ describe('Testa a aplicação', () => {
     const sendButton = screen.getByTestId('exec-search-btn');
     expect(sendButton).toBeInTheDocument();
 
-    userEvent.type(inputSearch, 'aaa');
-    userEvent.click(firstLetterRadio);
-    userEvent.click(sendButton);
-
-    userEvent.type(inputSearch, 'fish');
-    userEvent.click(nameRadio);
-    userEvent.click(sendButton);
-
-    userEvent.type(inputSearch, 'rice');
+    userEvent.type(inputSearch, 'Chicken');
     userEvent.click(ingredientRadio);
     userEvent.click(sendButton);
-    expect(sendButton).toBeInTheDocument();
+    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
   });
 });
