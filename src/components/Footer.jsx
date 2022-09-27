@@ -5,13 +5,13 @@ import meals from '../images/mealIcon.svg';
 
 function Footer() {
   return (
-    <div data-testid="footer">
-      <Link to="drinks" data-testid="drinks-bottom-btn">
-        <img src={ drinks } alt="toDrinks" />
+    <div className="footer" data-testid="footer">
+      <Link to="drinks">
+        <img data-testid="drinks-bottom-btn" src={ drinks } alt="toDrinks" />
       </Link>
 
-      <Link to="meals" data-testid="meals-bottom-btn">
-        <img src={ meals } alt="toMeals" />
+      <Link to="meals">
+        <img data-testid="meals-bottom-btn" src={ meals } alt="toMeals" />
       </Link>
     </div>
   );
