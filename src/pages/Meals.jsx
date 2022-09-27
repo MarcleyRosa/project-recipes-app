@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import SearchBar from '../components/SearchBar';
 import RecipesContext from '../context/RecipesContext';
 
@@ -22,6 +23,7 @@ function Meals() {
     <div>
       <Header headers={ title } isRoute />
       <SearchBar request={ setIsRequest } />
+      <Footer />
     </div>
   );
 }
