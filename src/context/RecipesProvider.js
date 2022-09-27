@@ -6,10 +6,9 @@ function RecipesProvider({ children }) {
   const [state, setState] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [inputEmail, setInputEmail] = useState('');
-  const [searchInput, setSearchInput] = useState('a');
+  const [searchInput, setSearchInput] = useState('');
   const [urlSelect, setUrlSelect] = useState('');
-
-  console.log(searchInput);
+  const [requestAPI, setRequestAPI] = useState({ drinks: [], meals: [] });
 
   const contextType = { state,
     setState,
@@ -21,6 +20,8 @@ function RecipesProvider({ children }) {
     setSearchInput,
     urlSelect,
     setUrlSelect,
+    requestAPI,
+    setRequestAPI,
   };
 
   return (
