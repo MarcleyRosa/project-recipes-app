@@ -6,13 +6,20 @@ function RecipesProvider({ children }) {
   const [state, setState] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [inputEmail, setInputEmail] = useState('');
+  const [searchInput, setSearchInput] = useState('a');
+  const [urlSelect, setUrlSelect] = useState('');
 
   const contextType = { state,
     setState,
     inputPassword,
     setInputPassword,
     setInputEmail,
-    inputEmail };
+    inputEmail,
+    searchInput,
+    setSearchInput,
+    urlSelect,
+    setUrlSelect,
+  };
 
   return (
     <RecipesContext.Provider value={ contextType }>
