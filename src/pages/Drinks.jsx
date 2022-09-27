@@ -1,4 +1,6 @@
+
 import React, { useContext } from 'react';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import RecipesContext from '../context/RecipesContext';
@@ -19,6 +21,7 @@ function Drinks() {
             <img src={ drink.strDrinkThumb } alt="" data-testid={ `${index}-card-img` } />
           </div>)
       ))}
+      <Footer />
     </div>
   );
 }
