@@ -6,7 +6,6 @@ import RecipesContext from '../context/RecipesContext';
 
 function Meals() {
   const { requestAPI } = useContext(RecipesContext);
-  
   const title = 'Meals';
   return (
     <div>

@@ -18,10 +18,8 @@ function SearchBar({ domain, typeAPI }) {
     case 'name':
       setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?s=`);
       break;
-    case 'first-letter':
-      setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?f=`);
+    default: setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?f=`);
       break;
-    default: break;
     }
   }, [nameSearch]);
 
@@ -31,10 +29,6 @@ function SearchBar({ domain, typeAPI }) {
         const response = await fetch(`${urlSelect}${searchInput}`);
         const json = await response.json();
         if (json.meals || json.drinks) setRequestAPI(json);
-      }
-      if (requestAPI[typeAPI].length === 1) {
-        const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
-        history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
       }
     };
     fetchApi();
