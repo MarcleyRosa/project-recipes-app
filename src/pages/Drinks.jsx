@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';

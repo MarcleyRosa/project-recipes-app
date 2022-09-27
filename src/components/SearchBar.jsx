@@ -29,6 +29,7 @@ function SearchBar({ domain, typeAPI }) {
         const response = await fetch(`${urlSelect}${searchInput}`);
         const json = await response.json();
         if (json.meals || json.drinks) setRequestAPI(json);
+        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
       }
     };
     fetchApi();
@@ -45,10 +46,7 @@ function SearchBar({ domain, typeAPI }) {
     if (nameSearch === 'first-letter' && searchInput.length > 1) {
       return global.alert('Your search must have only 1 (one) character');
     }
-    if (requestAPI[typeAPI].length === 0) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-    return setIsRequest((prevState) => !prevState);
+    setIsRequest((prevState) => !prevState);
   };
 
   return (
