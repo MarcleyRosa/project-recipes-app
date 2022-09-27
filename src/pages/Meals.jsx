@@ -17,8 +17,6 @@ function Meals() {
     fetchApi();
   }, [isRequest]);
 
-  console.log(requestAPI);
-
   const title = 'Meals';
   return (
     <div>
