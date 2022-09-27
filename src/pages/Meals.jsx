@@ -10,7 +10,7 @@ function Meals() {
     <div>
       <Header headers={ title } isRoute />
       <SearchBar domain="themealdb" typeAPI="meals" />
-      { requestAPI.meals && requestAPI.meals.map((meal, index) => (
+      { requestAPI.meals.map((meal, index) => (
         <div key={ index } data-testid={ `${index}-recipe-card` }>
           <p data-testid={ `${index}-card-name` }>{meal.strMeal}</p>
           <img src={ meal.strMealThumb } alt="" data-testid={ `${index}-card-img` } />

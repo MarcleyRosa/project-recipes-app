@@ -32,6 +32,10 @@ function SearchBar({ domain, typeAPI }) {
         const json = await response.json();
         if (json.meals || json.drinks) setRequestAPI(json);
       }
+      if (requestAPI[typeAPI].length === 1) {
+        const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
+        history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
+      }
     };
     fetchApi();
   }, [isRequest]);
@@ -47,7 +51,6 @@ function SearchBar({ domain, typeAPI }) {
     if (nameSearch === 'first-letter' && searchInput.length > 1) {
       return global.alert('Your search must have only 1 (one) character');
     }
-    console.log(requestAPI);
     if (requestAPI[typeAPI].length === 0) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
