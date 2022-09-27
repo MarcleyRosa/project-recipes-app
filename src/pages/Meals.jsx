@@ -15,7 +15,7 @@ function Meals() {
       setRequestAPI(json);
     };
     fetchApi();
-  }, [isRequest]);
+  }, [isRequest, requestAPI]);
 
   const title = 'Meals';
   return (
