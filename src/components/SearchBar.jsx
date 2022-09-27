@@ -18,10 +18,8 @@ function SearchBar({ domain, typeAPI }) {
     case 'name':
       setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?s=`);
       break;
-    case 'first-letter':
-      setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?f=`);
+    default: setUrlSelect('https://www.themealdb.com/api/json/v1/1/search.php?f=');
       break;
-    default: break;
     }
   }, [nameSearch]);
 
