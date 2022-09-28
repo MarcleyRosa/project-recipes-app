@@ -16,7 +16,7 @@ function Drinks() {
   }, []);
 
   return (
-    <div>
+    <div className="drinksContainer">
       <Header headers={ title } isRoute />
       <SearchBar domain="thecocktaildb" typeAPI="drinks" />
       <Recipes typeAPI="drinks" />
