@@ -6,7 +6,7 @@ import RecipesContext from '../context/RecipesContext';
 function SearchBar({ domain, typeAPI }) {
   const { setUrlSelect, searchInput, urlSelect,
     setRequestAPI, requestAPI } = useContext(RecipesContext);
-  const [nameSearch, setNameSearch] = useState('name');
+  const [nameSearch, setNameSearch] = useState('');
   const [isRequest, setIsRequest] = useState(false);
   const history = useHistory();
 
@@ -25,7 +25,7 @@ function SearchBar({ domain, typeAPI }) {
 
   useEffect(() => {
     const fetchApi = async () => {
-      if (urlSelect.length && searchInput.length) {
+      if (nameSearch.length || urlSelect.length) {
         const response = await fetch(`${urlSelect}${searchInput}`);
         const json = await response.json();
         if (json?.meals || json?.drinks) setRequestAPI(json);
@@ -33,10 +33,10 @@ function SearchBar({ domain, typeAPI }) {
       }
     };
     fetchApi();
-  }, [isRequest]);
+  }, [isRequest, urlSelect]);
 
   useEffect(() => {
-    if (requestAPI[typeAPI].length === 1) {
+    if (requestAPI[typeAPI]?.length === 1) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
