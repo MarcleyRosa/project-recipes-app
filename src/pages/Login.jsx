@@ -1,20 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
 
 const MIN_LENGTH = 6;
 
 function Login() {
+  const history = useHistory();
   const [isDisable, setIsDisable] = useState(true);
   const { inputEmail,
     inputPassword,
     setInputEmail,
     setInputPassword } = useContext(RecipesContext);
 
-  const isButtonDisabled = ({ target }) => {
-    const validPassword = inputPassword.length >= MIN_LENGTH;
+  const handleClick = () => {
+    localStorage.setItem('user', JSON.stringify({ email: inputEmail }));
+    localStorage.setItem('mealsToken', '1');
+    localStorage.setItem('drinksToken', '1');
+    setInputEmail('');
+    setInputPassword('');
+    history.push('/meals');
+  };
+
+  useEffect(() => {
+    const validPassword = inputPassword.length > MIN_LENGTH;
     const validEmail = (/\S+@\S+\.\S+/).test(inputEmail);
     if (validEmail && validPassword) setIsDisable(false);
-  };
+  }, [inputEmail, inputPassword]);
 
   return (
     <div>
@@ -22,7 +33,7 @@ function Login() {
         Email
         <input
           value={ inputEmail }
-          onChange={ isButtonDisabled }
+          onChange={ ({ target: { value } }) => setInputEmail(value) }
           type="text"
           data-testid="email-input"
           id="email"
@@ -33,14 +44,19 @@ function Login() {
         Senha
         <input
           value={ inputPassword }
-          onChange={ isButtonDisabled }
+          onChange={ ({ target: { value } }) => setInputPassword(value) }
           type="password"
           data-testid="password-input"
           id="password"
         />
       </label>
 
-      <button type="button" data-testid="login-submit-btn" disabled={ isDisable }>
+      <button
+        onClick={ handleClick }
+        type="button"
+        data-testid="login-submit-btn"
+        disabled={ isDisable }
+      >
         Enter
       </button>
     </div>
