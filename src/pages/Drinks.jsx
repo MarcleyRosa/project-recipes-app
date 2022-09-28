@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -9,7 +8,6 @@ function Drinks() {
   const { requestAPI } = useContext(RecipesContext);
   const title = 'Drinks';
   const maxRenderRecipe = 11;
-  console.log(requestAPI);
   return (
     <div>
       <Header headers={ title } isRoute />

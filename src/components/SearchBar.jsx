@@ -7,7 +7,6 @@ function SearchBar({ domain, typeAPI }) {
   const { setUrlSelect, searchInput, urlSelect,
     setRequestAPI, requestAPI } = useContext(RecipesContext);
   const [nameSearch, setNameSearch] = useState('name');
-  const [isRequest, setIsRequest] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -18,41 +17,36 @@ function SearchBar({ domain, typeAPI }) {
     case 'name':
       setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?s=`);
       break;
-    default: setUrlSelect('https://www.themealdb.com/api/json/v1/1/search.php?f=');
+    default: setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?f=`);
       break;
     }
   }, [nameSearch]);
 
-  useEffect(() => {
-    const fetchApi = async () => {
-      if (urlSelect.length && searchInput.length) {
-        const response = await fetch(`${urlSelect}${searchInput}`);
-        const json = await response.json();
-        if (json.meals || json.drinks) setRequestAPI(json);
-      }
-      if (requestAPI[typeAPI].length === 1) {
-        const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
-        history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
-      }
-    };
+  /*  useEffect(() => {
     fetchApi();
-  }, [isRequest]);
+  }, [isRequest]); */
+
+  const fetchApi = async () => {
+    const response = await fetch(`${urlSelect}${searchInput}`);
+    const json = await response.json();
+    setRequestAPI(json);
+    if (json?.meals === null || json?.drinks === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+  };
 
   useEffect(() => {
     if (requestAPI[typeAPI].length === 1) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
-  }, [isRequest, requestAPI]);
+  }, [requestAPI]);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (nameSearch === 'first-letter' && searchInput.length > 1) {
-      return global.alert('Your search must have only 1 (one) character');
+      global.alert('Your search must have only 1 (one) character');
     }
-    if (requestAPI[typeAPI].length === 0) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-    return setIsRequest((prevState) => !prevState);
+    await fetchApi();
   };
 
   return (
