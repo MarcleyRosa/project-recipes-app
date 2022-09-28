@@ -1,24 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import Recipes from '../components/Recipes';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import RecipesContext from '../context/RecipesContext';
 
 function Drinks() {
-  const { requestAPI } = useContext(RecipesContext);
+  const { urlSelect, setUrlSelect } = useContext(RecipesContext);
+  const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const title = 'Drinks';
+
+  useEffect(() => {
+    setUrlSelect(urlDrinks);
+  }, [urlSelect]);
+
   const maxRenderRecipe = 11;
+  
   return (
     <div>
       <Header headers={ title } isRoute />
       <SearchBar domain="thecocktaildb" typeAPI="drinks" />
-      { requestAPI.drinks.map((drink, index) => (
-        index <= maxRenderRecipe && (
-          <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <p data-testid={ `${index}-card-name` }>{drink.strDrink}</p>
-            <img src={ drink.strDrinkThumb } alt="" data-testid={ `${index}-card-img` } />
-          </div>)
-      ))}
+      <Recipes typeAPI="drinks" />
       <Footer />
     </div>
   );

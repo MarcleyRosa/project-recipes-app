@@ -6,7 +6,9 @@ import RecipesContext from '../context/RecipesContext';
 function SearchBar({ domain, typeAPI }) {
   const { setUrlSelect, searchInput, urlSelect,
     setRequestAPI, requestAPI } = useContext(RecipesContext);
-  const [nameSearch, setNameSearch] = useState('name');
+  const [nameSearch, setNameSearch] = useState('');
+  const [isRequest, setIsRequest] = useState(false);
+
   const history = useHistory();
 
   useEffect(() => {
@@ -22,21 +24,20 @@ function SearchBar({ domain, typeAPI }) {
     }
   }, [nameSearch]);
 
-  /*  useEffect(() => {
+  useEffect(() => {
+    const fetchApi = async () => {
+      if (nameSearch.length || urlSelect.length) {
+        const response = await fetch(`${urlSelect}${searchInput}`);
+        const json = await response.json();
+        if (json?.meals || json?.drinks) setRequestAPI(json);
+        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      }
+    };
     fetchApi();
-  }, [isRequest]); */
-
-  const fetchApi = async () => {
-    const response = await fetch(`${urlSelect}${searchInput}`);
-    const json = await response.json();
-    setRequestAPI(json);
-    if (json?.meals === null || json?.drinks === null) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-  };
+  }, [isRequest, urlSelect]);
 
   useEffect(() => {
-    if (requestAPI[typeAPI].length === 1) {
+    if (requestAPI[typeAPI]?.length === 1) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
@@ -44,6 +45,7 @@ function SearchBar({ domain, typeAPI }) {
 
   const handleClick = async () => {
     if (nameSearch === 'first-letter' && searchInput.length > 1) {
+    // setIsRequest((prevState) => !prevState);
       global.alert('Your search must have only 1 (one) character');
     }
     await fetchApi();
