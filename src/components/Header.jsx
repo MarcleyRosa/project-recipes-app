@@ -17,9 +17,12 @@ function Header({ headers, isRoute }) {
       <Link to="/profile">
         <img data-testid="profile-top-btn" src={ profileIcon } alt="" />
       </Link>
-      <button type="button" onClick={ showOrHide }>
-        { isRoute && <img data-testid="search-top-btn" src={ searchIcon } alt="" /> }
-      </button>
+      { isRoute && (
+        <button type="button" onClick={ showOrHide }>
+          <img data-testid="search-top-btn" src={ searchIcon } alt="" />
+        </button>
+      )}
+
       { showSearch && <input
         onChange={ ({ target: { value } }) => setSearchInput(value) }
         type="text"

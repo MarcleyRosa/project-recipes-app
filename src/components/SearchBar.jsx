@@ -5,10 +5,8 @@ import RecipesContext from '../context/RecipesContext';
 
 function SearchBar({ domain, typeAPI }) {
   const { setUrlSelect, searchInput, urlSelect,
-    setRequestAPI, requestAPI } = useContext(RecipesContext);
+    setRequestAPI, requestAPI, isRequest, setIsRequest } = useContext(RecipesContext);
   const [nameSearch, setNameSearch] = useState('');
-  const [isRequest, setIsRequest] = useState(false);
-
   const history = useHistory();
 
   useEffect(() => {
@@ -19,22 +17,31 @@ function SearchBar({ domain, typeAPI }) {
     case 'name':
       setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?s=`);
       break;
-    default: setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?f=`);
+    case 'first-letter':
+      setUrlSelect(`https://www.${domain}.com/api/json/v1/1/search.php?f=`);
       break;
+    default: break;
     }
   }, [nameSearch]);
 
+  // const tss = nameSearch === 'first-letter' && nameSearch.length > 1;
+
   useEffect(() => {
-    const fetchApi = async () => {
-      if (nameSearch.length || urlSelect.length) {
-        const response = await fetch(`${urlSelect}${searchInput}`);
-        const json = await response.json();
-        if (json?.meals || json?.drinks) setRequestAPI(json);
-        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
-      }
-    };
-    fetchApi();
-  }, [isRequest, urlSelect]);
+    try {
+      const fetchApi = async () => {
+        if (nameSearch.length || urlSelect.length) {
+          const response = await fetch(`${urlSelect}${searchInput}`);
+          const json = await response.json();
+          console.log(json);
+          if (json?.meals || json?.drinks) setRequestAPI(json);
+          else global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        }
+      };
+      fetchApi();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [isRequest]);
 
   useEffect(() => {
     if (requestAPI[typeAPI]?.length === 1) {
@@ -43,12 +50,11 @@ function SearchBar({ domain, typeAPI }) {
     }
   }, [requestAPI]);
 
-  const handleClick = async () => {
+  const handleClick = () => {
     if (nameSearch === 'first-letter' && searchInput.length > 1) {
-    // setIsRequest((prevState) => !prevState);
       global.alert('Your search must have only 1 (one) character');
     }
-    await fetchApi();
+    setIsRequest((prevState) => !prevState);
   };
 
   return (

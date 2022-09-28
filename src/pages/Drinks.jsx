@@ -6,16 +6,15 @@ import SearchBar from '../components/SearchBar';
 import RecipesContext from '../context/RecipesContext';
 
 function Drinks() {
-  const { urlSelect, setUrlSelect } = useContext(RecipesContext);
+  const { setUrlSelect, setIsRequest } = useContext(RecipesContext);
+
   const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const title = 'Drinks';
 
   useEffect(() => {
     setUrlSelect(urlDrinks);
-  }, [urlSelect]);
-
-  const maxRenderRecipe = 11;
-  
+    setIsRequest((prevState) => !prevState);
+  }, []);
   return (
     <div>
       <Header headers={ title } isRoute />

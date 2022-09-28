@@ -8,7 +8,7 @@ function Profile({ history }) {
   const title = 'Profile';
 
   const getEmail = JSON.parse(localStorage.getItem('user'));
-  const emailResult = getEmail.email;
+  const emailResult = getEmail?.email;
 
   const handleClick = () => {
     localStorage.clear();
@@ -19,7 +19,7 @@ function Profile({ history }) {
     <div>
       <Header headers={ title } isRoute={ false } />
       <h3 data-testid="profile-email">
-        {`Email: ${emailResult}`}
+        {emailResult}
       </h3>
       <Link to="/done-recipes">
         <button data-testid="profile-done-btn" type="button">Done Recipes</button>

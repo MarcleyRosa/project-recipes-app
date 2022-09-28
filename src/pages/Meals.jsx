@@ -6,13 +6,14 @@ import Recipes from '../components/Recipes';
 import RecipesContext from '../context/RecipesContext';
 
 function Meals() {
-  const { urlSelect, setUrlSelect } = useContext(RecipesContext);
+  const { setUrlSelect, setIsRequest } = useContext(RecipesContext);
   const urlMeals = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
   const title = 'Meals';
 
   useEffect(() => {
     setUrlSelect(urlMeals);
-  }, [urlSelect]);
+    setIsRequest((prevState) => !prevState);
+  }, []);
 
   return (
     <div className="mealsContainer">

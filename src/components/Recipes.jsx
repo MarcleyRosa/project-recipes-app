@@ -41,7 +41,12 @@ function Recipes({ typeAPI }) {
         index <= maxRenderRecipe && (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
             <p data-testid={ `${index}-card-name` }>{recipe[nameRecipe]}</p>
-            <img src={ recipe[thumb] } alt="" data-testid={ `${index}-card-img` } />
+            <img
+              className="img"
+              src={ recipe[thumb] }
+              alt=""
+              data-testid={ `${index}-card-img` }
+            />
           </div>)
       ))}
     </div>
