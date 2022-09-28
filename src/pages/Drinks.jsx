@@ -7,6 +7,7 @@ import RecipesContext from '../context/RecipesContext';
 
 function Drinks() {
   const { setUrlSelect, setIsRequest } = useContext(RecipesContext);
+
   const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const title = 'Drinks';
 
@@ -14,7 +15,6 @@ function Drinks() {
     setUrlSelect(urlDrinks);
     setIsRequest((prevState) => !prevState);
   }, []);
-
   return (
     <div>
       <Header headers={ title } isRoute />

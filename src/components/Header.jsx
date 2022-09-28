@@ -22,6 +22,7 @@ function Header({ headers, isRoute }) {
           <img data-testid="search-top-btn" src={ searchIcon } alt="" />
         </button>
       )}
+
       { showSearch && <input
         onChange={ ({ target: { value } }) => setSearchInput(value) }
         type="text"
