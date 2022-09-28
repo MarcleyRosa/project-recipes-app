@@ -15,7 +15,7 @@ function Meals() {
   }, [urlSelect]);
 
   return (
-    <div>
+    <div className="mealsContainer">
       <Header headers={ title } isRoute />
       <SearchBar domain="themealdb" typeAPI="meals" />
       <Recipes typeAPI="meals" />

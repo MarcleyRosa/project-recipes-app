@@ -14,6 +14,8 @@ function Drinks() {
     setUrlSelect(urlDrinks);
   }, [urlSelect]);
 
+  const maxRenderRecipe = 11;
+  
   return (
     <div>
       <Header headers={ title } isRoute />

@@ -8,6 +8,7 @@ function SearchBar({ domain, typeAPI }) {
     setRequestAPI, requestAPI } = useContext(RecipesContext);
   const [nameSearch, setNameSearch] = useState('');
   const [isRequest, setIsRequest] = useState(false);
+
   const history = useHistory();
 
   useEffect(() => {
@@ -40,13 +41,14 @@ function SearchBar({ domain, typeAPI }) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
-  }, [isRequest, requestAPI]);
+  }, [requestAPI]);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (nameSearch === 'first-letter' && searchInput.length > 1) {
-      return global.alert('Your search must have only 1 (one) character');
+    // setIsRequest((prevState) => !prevState);
+      global.alert('Your search must have only 1 (one) character');
     }
-    setIsRequest((prevState) => !prevState);
+    await fetchApi();
   };
 
   return (
