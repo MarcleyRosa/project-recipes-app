@@ -1,25 +1,28 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import App from '../App';
-import { mealIngredients } from '../../cypress/mocks/japaneseMeals';
-import renderWith from './helpers/renderWith';
+import renderPath from './helpers/renderWith';
 
-/* const alert = global.alert('Sorry, we haven\'t found any recipes for these filters.'); */
+const meals = require('../../cypress/mocks/meals');
 
 describe('Testa a aplicação', () => {
   test('Tela de login', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(mealIngredients),
+      json: jest.fn().mockResolvedValue(meals),
     });
-    renderWith(<App />);
+    renderPath('/');
     const inputEmailElement = screen.getByTestId('email-input');
     const inputPasswordElement = screen.getByTestId('password-input');
     const buttonElement = screen.getByRole('button', { name: /Enter/i });
 
-    userEvent.type(inputEmailElement, 'luisfernandesneto@gmail.com');
-    userEvent.type(inputPasswordElement, 'xablaus');
+    act(() => {
+      userEvent.type(inputEmailElement, 'luisfernandesneto@gmail.com');
+      userEvent.type(inputPasswordElement, 'xablaus');
+    });
+
     userEvent.click(buttonElement);
 
     const pageElement = screen.getByRole('heading', { name: /meals/i, level: 1 });
@@ -31,10 +34,10 @@ describe('Testa a aplicação', () => {
     expect(profileButton).toBeInTheDocument();
     expect(searchButton).toBeInTheDocument();
 
-    userEvent.click(searchButton);
-
+    act(() => {
+      userEvent.click(searchButton);
+    });
     const inputSearch = screen.getByTestId('search-input');
-
     expect(inputSearch).toBeInTheDocument();
 
     const ingredientRadio = screen.getByTestId('ingredient-search-radio');
@@ -48,9 +51,36 @@ describe('Testa a aplicação', () => {
     const sendButton = screen.getByTestId('exec-search-btn');
     expect(sendButton).toBeInTheDocument();
 
-    userEvent.type(inputSearch, 'Chicken');
-    userEvent.click(ingredientRadio);
-    userEvent.click(sendButton);
+    act(() => {
+      userEvent.type(inputSearch, 'Chicken');
+      userEvent.click(ingredientRadio);
+      userEvent.click(sendButton);
+    });
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
   });
+});
+test.only('xablau', async () => {
+  jest.spyOn(global, 'fetch');
+  global.fetch.mockResolvedValue({
+    json: jest.fn().mockResolvedValue(meals),
+  });
+  renderPath('/meals');
+
+  const searchButton = screen.getByTestId('search-top-btn');
+  act(() => {
+    userEvent.click(searchButton);
+  });
+  const ingredientRadio = screen.getByTestId('ingredient-search-radio');
+  const inputSearch = screen.getByTestId('search-input');
+  const sendButton = screen.getByTestId('exec-search-btn');
+
+  act(() => {
+    userEvent.type(inputSearch, 'Corba');
+    userEvent.click(ingredientRadio);
+    userEvent.click(sendButton);
+  });
+  expect(ingredientRadio).toBeChecked();
+  await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+
+  /* const mealTitle = screen.getByText('Corba'); */
 });

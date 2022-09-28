@@ -71,3 +71,12 @@
   bottom: 0;
   position: fixed;
 }
+
+.img {
+  width: 100px;
+}
+
+.mealsContainer {
+  height: 100%;
+  width: 100%;
+}
