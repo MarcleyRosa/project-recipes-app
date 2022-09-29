@@ -36,8 +36,6 @@ function Recipes({ typeAPI, domain }) {
     fetchAPI();
   }, [targetCategory]);
 
-  console.log(requestAPI);
-
   const categoryClick = (category) => {
     if (category === targetCategory) {
       setIsRequest((prevState) => !prevState);
