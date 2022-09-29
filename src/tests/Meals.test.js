@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import renderPath from './helpers/renderWith';
 import meals from '../../cypress/mocks/meals';
 import oneMeal from '../../cypress/mocks/oneMeal';
+import mealCategories from '../../cypress/mocks/mealCategories';
+import beefMeals from '../../cypress/mocks/beefMeals';
 
 const mockValue = () => {
   jest.spyOn(global, 'fetch');
@@ -55,11 +57,6 @@ describe('Testa a aplicação', () => {
     const firstLetterElement = await screen.findByTestId(cardImg);
     expect(firstLetterElement).toBeInTheDocument();
   });
-  test('Test NotFound', () => {
-    renderPath('/meals/52977');
-    const textElement = screen.getByText(/NotFound/i);
-    expect(textElement).toBeInTheDocument();
-  });
 });
 describe('Testa a aplicação', () => {
   test('Tela de login', async () => {
@@ -88,5 +85,24 @@ describe('Testa a aplicação', () => {
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(3));
 
     await waitFor(() => expect(history.location.pathname).toBe('/meals/52771'));
+  });
+  describe('Testa o componente recipes', () => {
+    test('Testa a requisição de APIs', async () => {
+      jest.spyOn(global, 'fetch');
+      global.fetch.mockResolvedValue({
+        json: jest.fn().mockResolvedValue(beefMeals)
+          .mockResolvedValueOnce(meals)
+          .mockResolvedValueOnce(mealCategories),
+      });
+      renderPath('/meals');
+
+      await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
+
+      const beefElement = await screen.findByTestId('Vegetarian-category-filter');
+      userEvent.click(beefElement);
+      userEvent.click(beefElement);
+      const allButton = screen.getByTestId('All-category-filter');
+      userEvent.click(allButton);
+    });
   });
 });
