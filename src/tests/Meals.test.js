@@ -11,6 +11,8 @@ const mockValue = () => {
   });
 };
 
+const cardImg = '0-card-img';
+
 describe('Testa a aplicação', () => {
   test('Tela de login', async () => {
     mockValue();
@@ -36,21 +38,21 @@ describe('Testa a aplicação', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(3));
 
-    const ingredientElement = await screen.findByTestId('0-card-img');
+    const ingredientElement = await screen.findByTestId(cardImg);
     expect(ingredientElement).toBeInTheDocument();
 
     userEvent.type(inputSearch, 'Chicken');
     userEvent.click(nameRadio);
     userEvent.click(sendButton);
 
-    const nameElement = await screen.findByTestId('0-card-img');
+    const nameElement = await screen.findByTestId(cardImg);
     expect(nameElement).toBeInTheDocument();
 
     userEvent.type(inputSearch, 'Chicken');
     userEvent.click(firstLetterRadio);
     userEvent.click(sendButton);
 
-    const firstLetterElement = await screen.findByTestId('0-card-img');
+    const firstLetterElement = await screen.findByTestId(cardImg);
     expect(firstLetterElement).toBeInTheDocument();
   });
   test('Test NotFound', () => {
