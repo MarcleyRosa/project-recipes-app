@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
+import RecipeDetails from './pages/RecipeDetails';
 import RecipeInProgress from './components/RecipeInProgress';
 
 function App() {
@@ -29,8 +30,8 @@ function App() {
           <Route exact path="/" component={ Login } />
           <Route exact path="/meals" component={ Meals } />
           <Route exact path="/drinks" component={ Drinks } />
-          <Route exact path="/meals/:id" component={ NotFound } />
-          <Route exact path="/drinks/:id" component={ NotFound } />
+          <Route exact path="/meals/:id" component={ RecipeDetails } />
+          <Route exact path="/drinks/:id" component={ RecipeDetails } />
           <Route
             exact
             path="/meals/:id/in-progress"

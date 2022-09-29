@@ -5,9 +5,14 @@ import RecipesContext from '../context/RecipesContext';
 
 function SearchBar({ domain, typeAPI }) {
   const { setUrlSelect, searchInput, urlSelect,
-    setRequestAPI, requestAPI, isRequest, setIsRequest } = useContext(RecipesContext);
+    setRequestAPI, requestAPI, isRequest, setIsRequest,
+    targetCategory, setTargetCategory } = useContext(RecipesContext);
+
   const [nameSearch, setNameSearch] = useState('');
   const history = useHistory();
+
+  const nameFirstLetter = nameSearch === 'first-letter';
+  const firstLetterLength = nameFirstLetter && searchInput.length > 1;
 
   useEffect(() => {
     switch (nameSearch) {
@@ -24,29 +29,34 @@ function SearchBar({ domain, typeAPI }) {
     }
   }, [nameSearch]);
 
-  // const tss = nameSearch === 'first-letter' && nameSearch.length > 1;
-
   useEffect(() => {
-    const fetchApi = async () => {
-      if (nameSearch.length || urlSelect.length) {
-        const response = await fetch(`${urlSelect}${searchInput}`);
-        const json = await response.json();
-        if (json?.meals || json?.drinks) setRequestAPI(json);
-        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
-      }
-    };
-    fetchApi();
+    try {
+      setTargetCategory('');
+      const fetchApi = async () => {
+        if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
+          const response = await fetch(`${urlSelect}${searchInput}`);
+          const json = await response.json();
+          console.log(json);
+          if (json?.meals || json?.drinks) setRequestAPI(json);
+          else global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        }
+      };
+      fetchApi();
+    } catch (error) {
+      console.log(error.message);
+    }
+
   }, [isRequest]);
 
   useEffect(() => {
-    if (requestAPI[typeAPI]?.length === 1) {
+    if (requestAPI[typeAPI]?.length === 1 && !targetCategory) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
-  }, [requestAPI]);
+  }, [requestAPI, targetCategory]);
 
   const handleClick = () => {
-    if (nameSearch === 'first-letter' && searchInput.length > 1) {
+    if (nameFirstLetter && searchInput.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     }
     setIsRequest((prevState) => !prevState);
