@@ -27,20 +27,15 @@ function SearchBar({ domain, typeAPI }) {
   // const tss = nameSearch === 'first-letter' && nameSearch.length > 1;
 
   useEffect(() => {
-    try {
-      const fetchApi = async () => {
-        if (nameSearch.length || urlSelect.length) {
-          const response = await fetch(`${urlSelect}${searchInput}`);
-          const json = await response.json();
-          console.log(json);
-          if (json?.meals || json?.drinks) setRequestAPI(json);
-          else global.alert('Sorry, we haven\'t found any recipes for these filters.');
-        }
-      };
-      fetchApi();
-    } catch (error) {
-      console.log(error.message);
-    }
+    const fetchApi = async () => {
+      if (nameSearch.length || urlSelect.length) {
+        const response = await fetch(`${urlSelect}${searchInput}`);
+        const json = await response.json();
+        if (json?.meals || json?.drinks) setRequestAPI(json);
+        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      }
+    };
+    fetchApi();
   }, [isRequest]);
 
   useEffect(() => {

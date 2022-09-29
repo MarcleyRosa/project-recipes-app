@@ -1,19 +1,10 @@
-import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from '../App';
-import renderWith from './helpers/renderWith';
+import renderPath from './helpers/renderWith';
 
 describe('Testa a aplicação', () => {
   test('Tela de profile', () => {
-    renderWith(<App />);
-    const inputEmailElement = screen.getByTestId('email-input');
-    const inputPasswordElement = screen.getByTestId('password-input');
-    const buttonElement = screen.getByRole('button', { name: /Enter/i });
-
-    userEvent.type(inputEmailElement, 'luisfernandesneto@gmail.com');
-    userEvent.type(inputPasswordElement, 'xablaus');
-    userEvent.click(buttonElement);
+    renderPath('/meals');
 
     const pageElement = screen.getByRole('heading', { name: /meals/i, level: 1 });
     expect(pageElement).toBeInTheDocument();
