@@ -7,7 +7,6 @@ import Login from './pages/Login';
 import RecipesProvider from './context/RecipesProvider';
 import Meals from './pages/Meals';
 import Drinks from './pages/Drinks';
-import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';

@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 
-function RecipeDetails({ match: { params: { id } } }) {
-  const history = useHistory();
-  console.log(id);
-  console.log(history.location.pathname.split('/')[2]);
+function RecipeDetails({ match: { path, params: { id } } }) {
+  const [detailsAPI, setDetailsAPI] = useState([]);
+  console.log(path);
+
+  const rout = path.split('/')[1];
+
+  const domain = rout === 'meals' ? 'themealdb' : 'thecocktaildb';
+
+  console.log(rout);
+
+  const urlDetails = `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${id}`;
+  useEffect(() => {
+    const fetchAPI = async () => {
+      const response = await fetch(urlDetails);
+      const json = await response.json();
+      setDetailsAPI(json);
+    };
+    fetchAPI();
+  }, []);
+
+  console.log(detailsAPI);
+
   return (
     <div>RecipeDetails</div>
   );
@@ -13,6 +30,7 @@ function RecipeDetails({ match: { params: { id } } }) {
 
 RecipeDetails.propTypes = {
   match: PropTypes.shape({
+    path: PropTypes.string,
     params: PropTypes.shape({
       id: PropTypes.string,
     }),
