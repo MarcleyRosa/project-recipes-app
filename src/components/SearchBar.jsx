@@ -45,6 +45,7 @@ function SearchBar({ domain, typeAPI }) {
     } catch (error) {
       console.log(error.message);
     }
+
   }, [isRequest]);
 
   useEffect(() => {
