@@ -6,7 +6,7 @@ function RecipeInProgress({ typeAPI }) {
   const [recipe, setRecipe] = useState({});
   const { id } = useParams();
 
-  const urlMeals = `www.themealdb.com/api/json/ v1/1/lookup.php?i=${id}`;
+  const urlMeals = `www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   const urlDrinks = `www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const url = typeAPI === 'drinks' ? urlDrinks : urlMeals;
 

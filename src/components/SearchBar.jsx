@@ -30,21 +30,17 @@ function SearchBar({ domain, typeAPI }) {
   }, [nameSearch]);
 
   useEffect(() => {
-    try {
-      setTargetCategory('');
-      const fetchApi = async () => {
-        if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
-          const response = await fetch(`${urlSelect}${searchInput}`);
-          const json = await response.json();
-          console.log(json);
-          if (json?.meals || json?.drinks) setRequestAPI(json);
-          else global.alert('Sorry, we haven\'t found any recipes for these filters.');
-        }
-      };
-      fetchApi();
-    } catch (error) {
-      console.log(error.message);
-    }
+    setTargetCategory('');
+    const fetchApi = async () => {
+      if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
+        const response = await fetch(`${urlSelect}${searchInput}`);
+        const json = await response.json();
+        console.log(json);
+        if (json?.meals || json?.drinks) setRequestAPI(json);
+        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      }
+    };
+    fetchApi();
   }, [isRequest]);
 
   useEffect(() => {
