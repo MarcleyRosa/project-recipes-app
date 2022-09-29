@@ -19,7 +19,7 @@ function Meals() {
     <div className="mealsContainer">
       <Header headers={ title } isRoute />
       <SearchBar domain="themealdb" typeAPI="meals" />
-      <Recipes typeAPI="meals" />
+      <Recipes typeAPI="meals" domain="themealdb" />
       <Footer />
     </div>
   );

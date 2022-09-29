@@ -10,6 +10,7 @@ function RecipesProvider({ children }) {
   const [urlSelect, setUrlSelect] = useState('');
   const [requestAPI, setRequestAPI] = useState({ drinks: [], meals: [] });
   const [isRequest, setIsRequest] = useState(false);
+  const [targetCategory, setTargetCategory] = useState('');
 
   const contextType = { state,
     setState,
@@ -25,6 +26,8 @@ function RecipesProvider({ children }) {
     setRequestAPI,
     isRequest,
     setIsRequest,
+    targetCategory,
+    setTargetCategory,
   };
 
   return (

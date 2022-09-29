@@ -5,9 +5,14 @@ import RecipesContext from '../context/RecipesContext';
 
 function SearchBar({ domain, typeAPI }) {
   const { setUrlSelect, searchInput, urlSelect,
-    setRequestAPI, requestAPI, isRequest, setIsRequest } = useContext(RecipesContext);
+    setRequestAPI, requestAPI, isRequest, setIsRequest,
+    targetCategory, setTargetCategory } = useContext(RecipesContext);
+
   const [nameSearch, setNameSearch] = useState('');
   const history = useHistory();
+
+  const nameFirstLetter = nameSearch === 'first-letter';
+  const firstLetterLength = nameFirstLetter && searchInput.length > 1;
 
   useEffect(() => {
     switch (nameSearch) {
@@ -24,12 +29,11 @@ function SearchBar({ domain, typeAPI }) {
     }
   }, [nameSearch]);
 
-  // const tss = nameSearch === 'first-letter' && nameSearch.length > 1;
-
   useEffect(() => {
     try {
+      setTargetCategory('');
       const fetchApi = async () => {
-        if (nameSearch.length || urlSelect.length) {
+        if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
           const response = await fetch(`${urlSelect}${searchInput}`);
           const json = await response.json();
           console.log(json);
@@ -44,14 +48,14 @@ function SearchBar({ domain, typeAPI }) {
   }, [isRequest]);
 
   useEffect(() => {
-    if (requestAPI[typeAPI]?.length === 1) {
+    if (requestAPI[typeAPI]?.length === 1 && !targetCategory) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
-  }, [requestAPI]);
+  }, [requestAPI, targetCategory]);
 
   const handleClick = () => {
-    if (nameSearch === 'first-letter' && searchInput.length > 1) {
+    if (nameFirstLetter && searchInput.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     }
     setIsRequest((prevState) => !prevState);

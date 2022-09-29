@@ -19,7 +19,7 @@ function Drinks() {
     <div className="drinksContainer">
       <Header headers={ title } isRoute />
       <SearchBar domain="thecocktaildb" typeAPI="drinks" />
-      <Recipes typeAPI="drinks" />
+      <Recipes typeAPI="drinks" domain="thecocktaildb" />
       <Footer />
     </div>
   );
