@@ -8,6 +8,11 @@ import beefMeals from '../../cypress/mocks/beefMeals';
 import drinks from '../../cypress/mocks/drinks';
 import oneDrink from '../../cypress/mocks/oneDrink';
 
+const elementSearch = 'search-top-btn';
+const elementInput = 'search-input';
+const elementNameRadio = 'name-search-radio';
+const elementButton = 'exec-search-btn';
+
 const mockValue = () => {
   jest.spyOn(global, 'fetch');
   global.fetch.mockResolvedValue({
@@ -17,24 +22,24 @@ const mockValue = () => {
 
 const cardImg = '0-card-img';
 
-describe('Testa a aplicação', () => {
-  test('Tela de login', async () => {
+describe('Testa a meals', () => {
+  test('Tela meals', async () => {
     mockValue();
     renderPath('/meals');
     const pageElement = screen.getByRole('heading', { name: /meals/i, level: 1 });
     expect(pageElement).toBeInTheDocument();
 
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(elementSearch);
 
     userEvent.click(searchButton);
-    const inputSearch = screen.getByTestId('search-input');
+    const inputSearch = screen.getByTestId(elementInput);
     expect(inputSearch).toBeInTheDocument();
 
     const ingredientRadio = screen.getByTestId('ingredient-search-radio');
-    const nameRadio = screen.getByTestId('name-search-radio');
+    const nameRadio = screen.getByTestId(elementNameRadio);
     const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
 
-    const sendButton = screen.getByTestId('exec-search-btn');
+    const sendButton = screen.getByTestId(elementButton);
 
     userEvent.type(inputSearch, 'Onion');
     userEvent.click(ingredientRadio);
@@ -60,8 +65,8 @@ describe('Testa a aplicação', () => {
     expect(firstLetterElement).toBeInTheDocument();
   });
 });
-describe('Testa a aplicação', () => {
-  test('Tela de login', async () => {
+describe('Testa meals', () => {
+  test('Tela one meal', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(oneMeal).mockResolvedValueOnce(meals),
@@ -70,15 +75,15 @@ describe('Testa a aplicação', () => {
     const pageElement = screen.getByRole('heading', { name: /meals/i, level: 1 });
     expect(pageElement).toBeInTheDocument();
 
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(elementSearch);
 
     userEvent.click(searchButton);
-    const inputSearch = screen.getByTestId('search-input');
+    const inputSearch = screen.getByTestId(elementInput);
     expect(inputSearch).toBeInTheDocument();
 
-    const nameRadio = screen.getByTestId('name-search-radio');
+    const nameRadio = screen.getByTestId(elementNameRadio);
 
-    const sendButton = screen.getByTestId('exec-search-btn');
+    const sendButton = screen.getByTestId(elementButton);
 
     userEvent.type(inputSearch, 'Corba');
     userEvent.click(nameRadio);
@@ -143,15 +148,15 @@ describe('Testa a aplicação', () => {
     const pageElement = screen.getByRole('heading', { name: /drinks/i, level: 1 });
     expect(pageElement).toBeInTheDocument();
 
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(elementSearch);
 
     userEvent.click(searchButton);
-    const inputSearch = screen.getByTestId('search-input');
+    const inputSearch = screen.getByTestId(elementInput);
     expect(inputSearch).toBeInTheDocument();
 
-    const nameRadio = screen.getByTestId('name-search-radio');
+    const nameRadio = screen.getByTestId(elementNameRadio);
 
-    const sendButton = screen.getByTestId('exec-search-btn');
+    const sendButton = screen.getByTestId(elementButton);
 
     userEvent.type(inputSearch, 'Corba');
     userEvent.click(nameRadio);
