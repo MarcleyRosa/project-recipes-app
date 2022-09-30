@@ -39,6 +39,11 @@ function RecipeDetails({ match: { path, params: { id } } }) {
     fetchRecomendatio();
   }, []);
 
+  const handleClickStart = () => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(detailsAPI));
+    history.push(`/${identRecipe}/${id}/in-progress`);
+  };
+
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
 
   const doneRecipe = localStorageDone?.some((recipe) => (
@@ -108,7 +113,7 @@ function RecipeDetails({ match: { path, params: { id } } }) {
           className="button-position"
           data-testid="start-recipe-btn"
           type="button"
-          onClick={ () => history.push(`/${identRecipe}/${id}/in-progress`) }
+          onClick={ handleClickStart }
         >
           Start Recipe
 

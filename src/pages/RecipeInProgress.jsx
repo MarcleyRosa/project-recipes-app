@@ -1,43 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
-import PropTypes from 'prop-types';
+import React, { useContext, useState } from 'react';
+import propTypes from 'prop-types';
+import RecipesContext from '../context/RecipesContext';
 import Buttons from '../components/Buttons';
 
-function RecipeInProgress({ typeAPI }) {
-  const [recipe, setRecipe] = useState({});
-  const { id } = useParams();
+function RecipeInProgress({ history }) {
+  const { typeInProgress } = useContext(RecipesContext);
+  const [checkbox, setCheckbox] = useState();
+  const recInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
-  const urlMeals = `www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-  const urlDrinks = `www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-  const url = typeAPI === 'drinks' ? urlDrinks : urlMeals;
+  const ingredients = Object.entries(recInProgress)
+    .filter((e) => e[0].includes('strIngredient'))
+    .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
 
-  useEffect(() => {
-    const fetchAPI = async () => {
-      const response = await fetch(url);
-      const json = await response.json();
-      setRecipe(json);
-    };
-    fetchAPI();
-  }, []);
+  const handleChecked = () => {
+    if (checkbox === false) {
+      setCheckbox(true);
+    } else {
+      setCheckbox(false);
+    }
+  };
+
+  const handleClick = () => {
+    history.push('/done-recipes');
+  };
 
   return (
     <div>
       <p data-testid="recipe-title">
-        { typeAPI === 'drinks' ? recipe?.strDrink : recipe?.strMeal }
+        { typeInProgress === 'drinks' ? recInProgress.strDrink : recInProgress.strMeal }
       </p>
       <img
         className="img"
-        src={ typeAPI === 'drinks' ? recipe?.strDrinkThumb : recipe?.strMealThumb }
+        src={ typeInProgress === 'drinks'
+          ? recInProgress.strDrinkThumb : recInProgress.strMealThumb }
         alt=""
         data-testid="recipe-photo"
       />
       <Buttons />
-      <h3 data-testid="recipe-category">{recipe?.strCategory}</h3>
-      { typeAPI === 'drinks' && <p>{recipe?.strAlcoholic}</p> }
-      <p data-testid="instructions">{recipe?.strInstructions}</p>
+      <h3 data-testid="recipe-category">{recInProgress.strCategory}</h3>
+      { typeInProgress === 'drinks' && <p>{recInProgress.strAlcoholic}</p> }
+      <p data-testid="instructions">{recInProgress.strInstructions}</p>
+
+      { ingredients.map((ingredient, index) => (
+        <div key={ index }>
+          <input
+            type="checkbox"
+            data-testid={ `${index}-ingredient-step` }
+            onChange={ handleChecked }
+          />
+          {`${ingredient}: ${typeInProgress[`strMeasure${index + 1}`]}`}
+        </div>
+      ))}
+
       <button
         type="button"
         data-testid="finish-recipe-btn"
+        onClick={ handleClick }
       >
         Finalizar Receita
       </button>
@@ -46,11 +64,9 @@ function RecipeInProgress({ typeAPI }) {
 }
 
 RecipeInProgress.propTypes = {
-  typeAPI: PropTypes.string,
-};
-
-RecipeInProgress.defaultProps = {
-  typeAPI: PropTypes.string,
+  history: propTypes.shape({
+    push: propTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default RecipeInProgress;
