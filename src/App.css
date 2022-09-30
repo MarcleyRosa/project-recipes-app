@@ -85,3 +85,15 @@
   height: 100%;
   width: 100%;
 }
+
+.details-card {
+  display: flex;
+  justify-content: space-around;
+}
+
+button[data-testid=start-recipe-btn] {
+  bottom: 0px;
+  position: -webkit-sticky;
+  position: fixed;
+  border: 2px solid #4CAF50;
+}
