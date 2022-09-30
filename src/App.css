@@ -91,9 +91,8 @@
   justify-content: space-around;
 }
 
-button[data-testid=start-recipe-btn] {
-  bottom: 0px;
-  position: -webkit-sticky;
+.button-position {
+  border: 2px solid #4caf50;
+  bottom: 0;
   position: fixed;
-  border: 2px solid #4CAF50;
 }
