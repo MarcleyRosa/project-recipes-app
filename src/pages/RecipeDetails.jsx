@@ -4,7 +4,7 @@ import '../App.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import Buttons from '../components/Buttons';
 
-function RecipeDetails({ match: { path, params: { id } } }) {
+function RecipeDetails({ match: { url, path, params: { id } } }) {
   const [detailsAPI, setDetailsAPI] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
   const history = useHistory();
@@ -45,27 +45,10 @@ function RecipeDetails({ match: { path, params: { id } } }) {
     recipe.id === id
   ));
 
-  const afs = {
-    drinks: {
-      17203: ['drinks'],
-      25203: ['drinks'],
-    },
-    meals: {
-      14252: ['meals'],
-      24242: ['meals'],
-    },
-  };
-
-  const test = Object.keys(afs.drinks);
-
-  console.log(test);
-
   const localStorageInProg = localStorage
     .getItem('inProgressRecipes')
     ? Object.keys(JSON.parse(localStorage
       .getItem('inProgressRecipes'))[identRecipe]) : [];
-
-  console.log(localStorageInProg);
 
   const idInProgress = localStorageInProg?.some((recipe) => (
     recipe === id
@@ -76,6 +59,7 @@ function RecipeDetails({ match: { path, params: { id } } }) {
   const ingredients = Object.entries(detailsAPI)
     .filter((e) => e[0].includes('strIngredient'))
     .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
+  console.log(detailsAPI);
 
   return (
     <div className="mealsContainer">
@@ -86,7 +70,7 @@ function RecipeDetails({ match: { path, params: { id } } }) {
         src={ detailsAPI[thumb] }
         alt=""
       />
-      <Buttons />
+      <Buttons linkCopy={ url } />
       { path.includes('drinks')
         ? <p data-testid="recipe-category">{ detailsAPI.strAlcoholic }</p>
         : <p data-testid="recipe-category">{ detailsAPI.strCategory }</p>}
