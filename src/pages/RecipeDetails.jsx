@@ -31,12 +31,12 @@ function RecipeDetails({ match: { path, params: { id } } }) {
       setDetailsAPI(json[identRecipe][0]);
     };
     fetchAPI();
-    const fetchRecomendatio = async () => {
+    const fetchRecomendation = async () => {
       const response = await fetch(urlRecommendation);
       const json = await response.json();
       setRecommendation(json);
     };
-    fetchRecomendatio();
+    fetchRecomendation();
   }, []);
 
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
