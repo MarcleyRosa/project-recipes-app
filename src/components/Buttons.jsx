@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import favoriteIcon from '../images/whiteHeartIcon.svg';
 
@@ -33,5 +34,9 @@ function Buttons({ linkCopy }) {
     </div>
   );
 }
+
+Buttons.propTypes = {
+  linkCopy: PropTypes.string.isRequired,
+};
 
 export default Buttons;

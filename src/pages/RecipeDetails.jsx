@@ -122,6 +122,7 @@ function RecipeDetails({ match: { url, path, params: { id } } }) {
 
 RecipeDetails.propTypes = {
   match: PropTypes.shape({
+    url: PropTypes.string,
     path: PropTypes.string,
     params: PropTypes.shape({
       id: PropTypes.string,
