@@ -5,7 +5,7 @@ import RecipesContext from '../context/RecipesContext';
 
 function Recipes({ typeAPI, domain }) {
   const { requestAPI, setRequestAPI, targetCategory,
-    setTargetCategory, setIsRequest } = useContext(RecipesContext);
+    setTargetCategory, setIsRequest, setTypeInProgress } = useContext(RecipesContext);
   const [categoryAPI, setCategoryAPI] = useState('');
 
   const maxRenderRecipe = 11;
@@ -23,6 +23,7 @@ function Recipes({ typeAPI, domain }) {
       setCategoryAPI(json);
     };
     fetchAPI();
+    setTypeInProgress(typeAPI);
   }, []);
 
   useEffect(() => {
