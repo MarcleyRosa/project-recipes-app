@@ -31,12 +31,12 @@ function RecipeDetails({ match: { path, params: { id } } }) {
       setDetailsAPI(json[identRecipe][0]);
     };
     fetchAPI();
-    const fetchRecomendatio = async () => {
+    const fetchRecomendation = async () => {
       const response = await fetch(urlRecommendation);
       const json = await response.json();
       setRecommendation(json);
     };
-    fetchRecomendatio();
+    fetchRecomendation();
   }, []);
 
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
@@ -45,19 +45,37 @@ function RecipeDetails({ match: { path, params: { id } } }) {
     recipe.id === id
   ));
 
-  // const localStorageInPro = Object.keys(JSON.parse(localStorage.getItem('inProgressRecipes')));
+  const afs = {
+    drinks: {
+      17203: ['drinks'],
+      25203: ['drinks'],
+    },
+    meals: {
+      14252: ['meals'],
+      24242: ['meals'],
+    },
+  };
 
-  // console.log(localStorageInPro);
+  const test = Object.keys(afs.drinks);
 
-  // const inProRecipe = localStorageInPro?.some((recipe) => (
-  //   recipe
-  // ));
+  console.log(test);
+
+  const localStorageInProg = localStorage
+    .getItem('inProgressRecipes')
+    ? Object.keys(JSON.parse(localStorage
+      .getItem('inProgressRecipes'))[identRecipe]) : [];
+
+  console.log(localStorageInProg);
+
+  const idInProgress = localStorageInProg?.some((recipe) => (
+    recipe === id
+  ));
+
+  const buttonName = idInProgress ? 'Continue Recipe' : 'Start Recipe';
 
   const ingredients = Object.entries(detailsAPI)
     .filter((e) => e[0].includes('strIngredient'))
     .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
-
-  console.log(recommendation);
 
   return (
     <div className="mealsContainer">
@@ -110,7 +128,7 @@ function RecipeDetails({ match: { path, params: { id } } }) {
           type="button"
           onClick={ () => history.push(`/${identRecipe}/${id}/in-progress`) }
         >
-          Start Recipe
+          { buttonName }
 
         </button>
       )}
