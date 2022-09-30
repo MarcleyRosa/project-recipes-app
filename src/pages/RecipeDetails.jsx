@@ -1,30 +1,120 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import '../App.css';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import Buttons from '../components/Buttons';
 
 function RecipeDetails({ match: { path, params: { id } } }) {
   const [detailsAPI, setDetailsAPI] = useState([]);
-  console.log(path);
+  const [recommendation, setRecommendation] = useState([]);
+  const history = useHistory();
 
-  const rout = path.split('/')[1];
+  const domain = path.includes('meals') ? 'themealdb' : 'thecocktaildb';
+  const identRecipe = path.includes('meals') ? 'meals' : 'drinks';
 
-  const domain = rout === 'meals' ? 'themealdb' : 'thecocktaildb';
+  const title = path.includes('meals') ? 'strMeal' : 'strDrink';
+  const thumb = path.includes('meals') ? 'strMealThumb' : 'strDrinkThumb';
 
-  console.log(rout);
+  const domainRec = path.includes('drinks') ? 'themealdb' : 'thecocktaildb';
+  const typeRecomendation = path.includes('drinks') ? 'meals' : 'drinks';
+  const nameRecipe = path.includes('drinks') ? 'strMeal' : 'strDrink';
 
   const urlDetails = `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${id}`;
+  const urlRecommendation = `https://www.${domainRec}.com/api/json/v1/1/search.php?s=`;
+
+  const maxNumberRecomendation = 6;
+
   useEffect(() => {
     const fetchAPI = async () => {
       const response = await fetch(urlDetails);
       const json = await response.json();
-      setDetailsAPI(json);
+      setDetailsAPI(json[identRecipe][0]);
     };
     fetchAPI();
+    const fetchRecomendatio = async () => {
+      const response = await fetch(urlRecommendation);
+      const json = await response.json();
+      setRecommendation(json);
+    };
+    fetchRecomendatio();
   }, []);
 
-  console.log(detailsAPI);
+  const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
+
+  const doneRecipe = localStorageDone?.some((recipe) => (
+    recipe.id === id
+  ));
+
+  // const localStorageInPro = Object.keys(JSON.parse(localStorage.getItem('inProgressRecipes')));
+
+  // console.log(localStorageInPro);
+
+  // const inProRecipe = localStorageInPro?.some((recipe) => (
+  //   recipe
+  // ));
+
+  const ingredients = Object.entries(detailsAPI)
+    .filter((e) => e[0].includes('strIngredient'))
+    .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
+
+  console.log(recommendation);
 
   return (
-    <div>RecipeDetails</div>
+    <div className="mealsContainer">
+      <h3 data-testid="recipe-title">{ detailsAPI[title] }</h3>
+      <img
+        data-testid="recipe-photo"
+        className="img"
+        src={ detailsAPI[thumb] }
+        alt=""
+      />
+      <Buttons />
+      { path.includes('drinks')
+        ? <p data-testid="recipe-category">{ detailsAPI.strAlcoholic }</p>
+        : <p data-testid="recipe-category">{ detailsAPI.strCategory }</p>}
+      { ingredients.map((ingredient, index) => (
+        <p
+          data-testid={ `${index}-ingredient-name-and-measure` }
+          key={ index }
+        >
+          {`${ingredient}: ${detailsAPI[`strMeasure${index + 1}`]}`}
+
+        </p>
+      ))}
+      <p data-testid="instructions">{ detailsAPI.strInstructions }</p>
+      { path.includes('meals') && <iframe
+        title="test"
+        width="420"
+        height="315"
+        data-testid="video"
+        src={ detailsAPI.strYoutube }
+        frameBorder="0"
+      /> }
+      <h4>Recomendações</h4>
+      <div className="details-card">
+        { recommendation[typeRecomendation]?.map((card, index) => (
+          index < maxNumberRecomendation && (
+            <div
+              key={ index }
+              data-testid={ `${index}-recommendation-card` }
+            >
+              <p data-testid={ `${index}-recommendation-title` }>{ card[nameRecipe]}</p>
+            </div>
+          )
+        ))}
+      </div>
+      { !doneRecipe && (
+        <button
+          className="button-position"
+          data-testid="start-recipe-btn"
+          type="button"
+          onClick={ () => history.push(`/${identRecipe}/${id}/in-progress`) }
+        >
+          Start Recipe
+
+        </button>
+      )}
+    </div>
   );
 }
 

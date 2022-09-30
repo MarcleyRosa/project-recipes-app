@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import PropTypes from 'prop-types';
+import Buttons from '../components/Buttons';
 
 function RecipeInProgress({ typeAPI }) {
   const [recipe, setRecipe] = useState({});
@@ -30,8 +31,7 @@ function RecipeInProgress({ typeAPI }) {
         alt=""
         data-testid="recipe-photo"
       />
-      <button type="button" data-testid="share-btn">Compartilhar</button>
-      <button type="button" data-testid="favorite-btn">Favoritar</button>
+      <Buttons />
       <h3 data-testid="recipe-category">{recipe?.strCategory}</h3>
       { typeAPI === 'drinks' && <p>{recipe?.strAlcoholic}</p> }
       <p data-testid="instructions">{recipe?.strInstructions}</p>

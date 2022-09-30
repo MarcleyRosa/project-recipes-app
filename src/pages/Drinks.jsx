@@ -15,6 +15,7 @@ function Drinks() {
     setUrlSelect(urlDrinks);
     setIsRequest((prevState) => !prevState);
   }, []);
+
   return (
     <div className="drinksContainer">
       <Header headers={ title } isRoute />
