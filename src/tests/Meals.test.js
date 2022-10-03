@@ -6,7 +6,6 @@ import oneMeal from '../../cypress/mocks/oneMeal';
 import mealCategories from '../../cypress/mocks/mealCategories';
 import beefMeals from '../../cypress/mocks/beefMeals';
 import drinks from '../../cypress/mocks/drinks';
-import oneDrink from '../../cypress/mocks/oneDrink';
 
 const elementSearch = 'search-top-btn';
 const elementInput = 'search-input';
@@ -114,7 +113,7 @@ describe('Testa o componente recipes', () => {
     userEvent.click(beefElement);
     const beefMealButton = await screen.findByText('Beef and Mustard Pie');
     userEvent.click(beefMealButton);
-    const shareButton = screen.getByRole('button', { name: /compartilhar/i });
+    const shareButton = screen.getByTestId('share-btn');
     expect(shareButton).toBeInTheDocument();
   });
 });
@@ -130,40 +129,15 @@ describe('Testa o componente recipes', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
 
-    const shareButton = screen.getByRole('button', { name: /compartilhar/i });
-    expect(shareButton).toBeInTheDocument();
     const firstIngredient = await screen.findByText(/penne rigate/i);
     expect(firstIngredient).toBeInTheDocument();
-    const startButton = screen.getByRole('button', { name: /start/i });
+    const startButton = screen.getByTestId('start-recipe-btn');
     userEvent.click(startButton);
-  });
-});
-describe('Testa a aplicação', () => {
-  test('Tela de login', async () => {
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(oneDrink).mockResolvedValueOnce(drinks),
-    });
-    const { history } = renderPath('/drinks');
-    const pageElement = screen.getByRole('heading', { name: /drinks/i, level: 1 });
-    expect(pageElement).toBeInTheDocument();
-
-    const searchButton = screen.getByTestId(elementSearch);
-
-    userEvent.click(searchButton);
-    const inputSearch = screen.getByTestId(elementInput);
-    expect(inputSearch).toBeInTheDocument();
-
-    const nameRadio = screen.getByTestId(elementNameRadio);
-
-    const sendButton = screen.getByTestId(elementButton);
-
-    userEvent.type(inputSearch, 'Corba');
-    userEvent.click(nameRadio);
-    userEvent.click(sendButton);
-
-    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(3));
-
-    await waitFor(() => expect(history.location.pathname).toBe('/drinks/178319'));
+    window.document.execCommand = jest.fn().mockImplementation(() => 'copied');
+    userEvent.click(screen.getByTestId('share-btn'));
+    expect(screen.getByText('Link copied!')).toBeInTheDocument();
+    const favoriteButton = screen.getByTestId('favorite-btn');
+    userEvent.click(favoriteButton);
+    expect(favoriteButton.children[0]).toHaveProperty('src', 'http://localhost/meals/52771/whiteHeartIcon.svg');
   });
 });

@@ -16,14 +16,15 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
   //     .filter((e) => e[0].includes('strIngredient'))
   //     .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
 
-  const recInProgress = JSON.parse(localStorage
-    .getItem('inProgressRecipes')) || {};
-
   useEffect(() => {
+    const recInProgress = JSON.parse(localStorage
+      .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
     if (recInProgress[typeRecipe]) setIngredients(recInProgress[typeRecipe][id]);
-  }, [detailsAPI]);
+  }, []);
 
-  console.log(recInProgress);
+  /* useEffect(() => {
+
+  }, [detailsAPI]); */
 
   const handleChecked = ({ target: { checked, name } }) => {
     console.log(checked);
@@ -51,22 +52,21 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
       { typeInProgress === 'drinks' && <p>{detailsAPI.strAlcoholic}</p> }
       <p data-testid="instructions">{detailsAPI.strInstructions}</p>
 
-      { ingredients?.map((ingredient, index) => (
-        <div key={ index }>
-          <label
-            className="riscar"
-            htmlFor="ingredientstep"
-          >
-            {`${ingredient}: ${detailsAPI[`strMeasure${index + 1}`]}`}
-            <input
-              id="ingredientstep"
-              data-testid={ `${index}-ingredient-step` }
-              type="checkbox"
-              name={ ingredient }
-              onChange={ handleChecked }
-            />
-          </label>
-        </div>
+      { ingredients.map((ingredient, index) => (
+        <label
+          key={ index }
+          data-testid={ `${index}-ingredient-step` }
+          className="riscar"
+          htmlFor={ `${index}-ingredient-step` }
+        >
+          {`${ingredient}: ${detailsAPI[`strMeasure${index + 1}`]}`}
+          <input
+            id={ `${index}-ingredient-step` }
+            type="checkbox"
+            name={ ingredient }
+            onChange={ handleChecked }
+          />
+        </label>
       ))}
 
       <button
