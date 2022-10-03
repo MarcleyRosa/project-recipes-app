@@ -1,72 +1,92 @@
-import React, { useContext, useState } from 'react';
-import propTypes from 'prop-types';
-import RecipesContext from '../context/RecipesContext';
-import Buttons from '../components/Buttons';
+// import React, { useContext, useState } from 'react';
+// import PropTypes from 'prop-types';
+// import RecipesContext from '../context/RecipesContext';
+// import Buttons from '../components/Buttons';
 
-function RecipeInProgress({ history }) {
-  const { typeInProgress } = useContext(RecipesContext);
-  const [checkbox, setCheckbox] = useState();
-  const recInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+// function RecipeInProgress({ history, match: { url, path, params: { id } } }) {
+//   const { typeInProgress } = useContext(RecipesContext);
+//   const [checkbox, setCheckbox] = useState();
+//   // const [inProgess, setInProgress] = useState(JSON
+//   //   .parse(localStorage.getItem('inProgressRecipes')) || {});
 
-  const ingredients = Object.entries(recInProgress)
-    .filter((e) => e[0].includes('strIngredient'))
-    .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
+//   const route = path.includes('meals');
 
-  const handleChecked = () => {
-    if (checkbox === false) {
-      setCheckbox(true);
-    } else {
-      setCheckbox(false);
-    }
-  };
+//   // const mealsOrDrinks = path.includes('meals') ? 'meals' : 'drinks';
 
-  const handleClick = () => {
-    history.push('/done-recipes');
-  };
+//   // const InProgress
+//   // const ingredients = inProgess[mealsOrDrinks]
+//   //   .map((ingredient) => Object.keys(ingredient) === id);
 
-  return (
-    <div>
-      <p data-testid="recipe-title">
-        { typeInProgress === 'drinks' ? recInProgress.strDrink : recInProgress.strMeal }
-      </p>
-      <img
-        className="img"
-        src={ typeInProgress === 'drinks'
-          ? recInProgress.strDrinkThumb : recInProgress.strMealThumb }
-        alt=""
-        data-testid="recipe-photo"
-      />
-      <Buttons />
-      <h3 data-testid="recipe-category">{recInProgress.strCategory}</h3>
-      { typeInProgress === 'drinks' && <p>{recInProgress.strAlcoholic}</p> }
-      <p data-testid="instructions">{recInProgress.strInstructions}</p>
+//   const inProgess = [];
 
-      { ingredients.map((ingredient, index) => (
-        <div key={ index }>
-          <input
-            type="checkbox"
-            data-testid={ `${index}-ingredient-step` }
-            onChange={ handleChecked }
-          />
-          {`${ingredient}: ${typeInProgress[`strMeasure${index + 1}`]}`}
-        </div>
-      ))}
+//   console.log(id);
 
-      <button
-        type="button"
-        data-testid="finish-recipe-btn"
-        onClick={ handleClick }
-      >
-        Finalizar Receita
-      </button>
-    </div>
-  );
-}
+//   const handleChecked = () => {
+//     if (checkbox === false) {
+//       setCheckbox(true);
+//     } else {
+//       setCheckbox(false);
+//     }
+//   };
 
-RecipeInProgress.propTypes = {
-  history: propTypes.shape({
-    push: propTypes.func.isRequired,
-  }).isRequired,
-};
+//   const handleClick = () => {
+//     history.push('/done-recipes');
+//   };
 
-export default RecipeInProgress;
+//   return (
+//     <div>
+//       <p data-testid="recipe-title">
+//         { typeInProgress === 'drinks' ? inProgess.strDrink : inProgess.strMeal }
+//       </p>
+//       <img
+//         className="img"
+//         src={ typeInProgress === 'drinks'
+//           ? inProgess.strDrinkThumb : inProgess.strMealThumb }
+//         alt=""
+//         data-testid="recipe-photo"
+//       />
+//       <Buttons linkCopy={ url } route={ route } />
+//       <h3 data-testid="recipe-category">{inProgess.strCategory}</h3>
+//       { typeInProgress === 'drinks' && <p>{inProgess.strAlcoholic}</p> }
+//       <p data-testid="instructions">{inProgess.strInstructions}</p>
+
+//       { ingredients.map((ingredient, index) => (
+//         <label
+//           key={ index }
+//           data-testid={ `${index}-ingredient-step` }
+//           htmlFor="ingredient"
+//         >
+//           {`${ingredient}: ${typeInProgress[`strMeasure${index + 1}`]}`}
+//           <input
+//             id="igredient"
+//             type="checkbox"
+//             onChange={ handleChecked }
+//           />
+//         </label>
+//       ))}
+
+//       <button
+//         type="button"
+//         data-testid="finish-recipe-btn"
+//         onClick={ handleClick }
+//       >
+//         Finalizar Receita
+//       </button>
+//     </div>
+//   );
+// }
+
+// RecipeInProgress.propTypes = {
+//   history: PropTypes.shape({
+//     push: PropTypes.func.isRequired,
+//   }).isRequired,
+//   match: PropTypes.shape({
+//     url: PropTypes.string,
+//     path: PropTypes.string,
+//     params: PropTypes.shape({
+//       id: PropTypes.string,
+//     }),
+//   }).isRequired,
+// };
+
+// export default RecipeInProgress;

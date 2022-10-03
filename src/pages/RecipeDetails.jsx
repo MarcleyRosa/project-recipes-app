@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import '../App.css';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import Buttons from '../components/Buttons';
+import RecipesContext from '../context/RecipesContext';
 
-function RecipeDetails({ match: { url, path, params: { id } } }) {
-  const [detailsAPI, setDetailsAPI] = useState([]);
+function RecipeDetails({ history, match: { url, path, params: { id } } }) {
+  const { detailsAPI, setDetailsAPI } = useContext(RecipesContext);
   const [recommendation, setRecommendation] = useState([]);
-  const history = useHistory();
+  const [requestInProgress, setRequestInProgress] = useState(JSON
+    .parse(localStorage.getItem('inProgressRecipes')) || {});
 
-  const domain = path.includes('meals') ? 'themealdb' : 'thecocktaildb';
-  const identRecipe = path.includes('meals') ? 'meals' : 'drinks';
+  const route = path.includes('meals');
 
-  const title = path.includes('meals') ? 'strMeal' : 'strDrink';
-  const thumb = path.includes('meals') ? 'strMealThumb' : 'strDrinkThumb';
+  const domain = route ? 'themealdb' : 'thecocktaildb';
+  const identRecipe = route ? 'meals' : 'drinks';
+  const idRecipe = route ? 'idMeal' : 'idDrink';
 
-  const domainRec = path.includes('drinks') ? 'themealdb' : 'thecocktaildb';
-  const typeRecomendation = path.includes('drinks') ? 'meals' : 'drinks';
-  const nameRecipe = path.includes('drinks') ? 'strMeal' : 'strDrink';
+  const title = route ? 'strMeal' : 'strDrink';
+  const thumb = route ? 'strMealThumb' : 'strDrinkThumb';
+
+  const domainRec = route ? 'thecocktaildb' : 'themealdb';
+  const typeRecomendation = route ? 'drinks' : 'meals';
+  const nameRecipe = route ? 'strDrink' : 'strMeal';
 
   const urlDetails = `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${id}`;
   const urlRecommendation = `https://www.${domainRec}.com/api/json/v1/1/search.php?s=`;
@@ -39,11 +43,6 @@ function RecipeDetails({ match: { url, path, params: { id } } }) {
     fetchRecomendation();
   }, []);
 
-  const handleClickStart = () => {
-    localStorage.setItem('inProgressRecipes', JSON.stringify(detailsAPI));
-    history.push(`/${identRecipe}/${id}/in-progress`);
-  };
-
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
 
   const doneRecipe = localStorageDone?.some((recipe) => (
@@ -56,15 +55,32 @@ function RecipeDetails({ match: { url, path, params: { id } } }) {
       .getItem('inProgressRecipes'))[identRecipe]) : [];
 
   const idInProgress = localStorageInProg?.some((recipe) => (
-    recipe === id
+    +recipe === +id
   ));
+
+  console.log(localStorageInProg);
 
   const buttonName = idInProgress ? 'Continue Recipe' : 'Start Recipe';
 
   const ingredients = Object.entries(detailsAPI)
     .filter((e) => e[0].includes('strIngredient'))
     .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
-  console.log(detailsAPI);
+
+  useEffect(() => {
+    const prevIds = requestInProgress[identRecipe];
+    if (requestInProgress) {
+      setRequestInProgress((prevState) => (
+        { ...prevState,
+          [identRecipe]: { ...prevIds,
+            [detailsAPI[idRecipe]]: ingredients } }));
+    }
+  }, [detailsAPI]);
+
+  const handleClickStart = () => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(requestInProgress));
+    setRequestInProgress({});
+    history.push(`/${identRecipe}/${id}/in-progress`);
+  };
 
   return (
     <div className="mealsContainer">
@@ -75,7 +91,7 @@ function RecipeDetails({ match: { url, path, params: { id } } }) {
         src={ detailsAPI[thumb] }
         alt=""
       />
-      <Buttons linkCopy={ url } />
+      <Buttons linkCopy={ url } route={ route } />
       { path.includes('drinks')
         ? <p data-testid="recipe-category">{ detailsAPI.strAlcoholic }</p>
         : <p data-testid="recipe-category">{ detailsAPI.strCategory }</p>}
@@ -126,6 +142,9 @@ function RecipeDetails({ match: { url, path, params: { id } } }) {
 }
 
 RecipeDetails.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
   match: PropTypes.shape({
     url: PropTypes.string,
     path: PropTypes.string,
