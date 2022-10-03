@@ -58,8 +58,6 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     +recipe === +id
   ));
 
-  console.log(localStorageInProg);
-
   const buttonName = idInProgress ? 'Continue Recipe' : 'Start Recipe';
 
   const ingredients = Object.entries(detailsAPI)
@@ -68,12 +66,13 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
 
   useEffect(() => {
     const prevIds = requestInProgress[identRecipe];
-    if (requestInProgress) {
+    if (requestInProgress && detailsAPI[idRecipe]) {
       setRequestInProgress((prevState) => (
         { ...prevState,
           [identRecipe]: { ...prevIds,
             [detailsAPI[idRecipe]]: ingredients } }));
     }
+    // localStorage.setItem('itemDetails', JSON.stringify(detailsAPI));
   }, [detailsAPI]);
 
   const handleClickStart = () => {
