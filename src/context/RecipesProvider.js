@@ -12,6 +12,7 @@ function RecipesProvider({ children }) {
   const [isRequest, setIsRequest] = useState(false);
   const [targetCategory, setTargetCategory] = useState('');
   const [typeInProgress, setTypeInProgress] = useState('');
+  const [detailsAPI, setDetailsAPI] = useState([]);
 
   const contextType = { state,
     setState,
@@ -31,6 +32,8 @@ function RecipesProvider({ children }) {
     setTargetCategory,
     typeInProgress,
     setTypeInProgress,
+    detailsAPI,
+    setDetailsAPI,
   };
 
   return (

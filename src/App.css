@@ -96,3 +96,7 @@
   bottom: 0;
   position: fixed;
 }
+
+.riscar {
+  text-decoration: line-through;
+}
