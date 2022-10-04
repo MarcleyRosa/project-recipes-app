@@ -5,31 +5,63 @@ import Buttons from '../components/Buttons';
 import '../App.css';
 
 function RecipeInProgress({ history, match: { path, params: { id } } }) {
-  const { typeInProgress, detailsAPI } = useContext(RecipesContext);
-  //   const [checkbox, setCheckbox] = useState();
+  const { typeInProgress, setDetailsAPI, detailsAPI } = useContext(RecipesContext);
 
-  const [ingredients, setIngredients] = useState([]);
+  const route = path.includes('meals');
 
-  const typeRecipe = path.includes('meals') ? 'meals' : 'drinks';
+  const typeRecipe = route ? 'meals' : 'drinks';
 
-  //   const amount = Object.entries(detailsAPI)
-  //     .filter((e) => e[0].includes('strIngredient'))
-  //     .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
+  const urlCopy = `/${typeRecipe}/${id}`;
+
+  const domain = route ? 'themealdb' : 'thecocktaildb';
+
+  const urlDetails = `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${id}`;
+
+  const checkedSave = JSON.parse(localStorage
+    .getItem('checkedInProgress')) || {};
+
+  const [checkbox, setCheckbox] = useState([]);
 
   useEffect(() => {
-    const recInProgress = JSON.parse(localStorage
-      .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
-    if (recInProgress[typeRecipe]) setIngredients(recInProgress[typeRecipe][id]);
+    const fetchAPI = async () => {
+      const response = await fetch(urlDetails);
+      const json = await response.json();
+      setDetailsAPI(json[typeRecipe][0]);
+    };
+    fetchAPI();
+    if (checkedSave[typeRecipe]) setCheckbox(checkedSave[typeRecipe][id]);
   }, []);
 
-  /* useEffect(() => {
+  const recInProgress = JSON.parse(localStorage
+    .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
 
-  }, [detailsAPI]); */
+  const requestingredients = Object.entries(detailsAPI)
+    .filter((e) => e[0].includes('strIngredient'))
+    .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
+
+  useEffect(() => {
+    const itensChecked = { [typeRecipe]: { ...recInProgress[typeRecipe],
+      [id]: checkbox } };
+    localStorage.setItem('checkedInProgress', JSON.stringify(itensChecked));
+  }, [detailsAPI, checkbox]);
 
   const handleChecked = ({ target: { checked, name } }) => {
-    console.log(checked);
-    console.log(name);
+    if (checked) {
+      setCheckbox((prevState) => [...prevState, name]);
+    } else {
+      const removeChecked = checkbox.filter((ingredient) => ingredient !== name);
+      setCheckbox(removeChecked);
+    }
   };
+
+  const isSelect = (ingredient) => checkbox?.some((check) => check === ingredient);
+
+  const requestChecked = checkbox ? requestingredients?.map((check) => checkbox
+    .some((loc) => loc === check)) : false;
+
+  const abillityFinish = requestChecked.every((check) => check === true);
+
+  console.log(abillityFinish);
 
   const handleClick = () => {
     history.push('/done-recipes');
@@ -47,30 +79,35 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
         alt=""
         data-testid="recipe-photo"
       />
-      <Buttons />
+      <Buttons linkCopy={ urlCopy } route={ route } />
       <h3 data-testid="recipe-category">{detailsAPI.strCategory}</h3>
       { typeInProgress === 'drinks' && <p>{detailsAPI.strAlcoholic}</p> }
       <p data-testid="instructions">{detailsAPI.strInstructions}</p>
 
-      { ingredients.map((ingredient, index) => (
-        <label
-          key={ index }
-          data-testid={ `${index}-ingredient-step` }
-          className="riscar"
-          htmlFor={ `${index}-ingredient-step` }
-        >
-          {`${ingredient}: ${detailsAPI[`strMeasure${index + 1}`]}`}
-          <input
-            id={ `${index}-ingredient-step` }
-            type="checkbox"
-            name={ ingredient }
-            onChange={ handleChecked }
-          />
-        </label>
+      { requestingredients?.map((ingredient, index) => (
+        <div key={ index }>
+          <label
+            className={ isSelect(ingredient) && 'riscar' }
+            htmlFor={ `${index}-ingredients` }
+            data-testid={ `${index}-ingredient-step` }
+          >
+            {`${ingredient}: ${detailsAPI[`strMeasure${index + 1}`]}`}
+            <input
+              id={ `${index}-ingredients` }
+              type="checkbox"
+              checked={ requestChecked[index] !== String ? requestChecked[index] : false }
+              name={ ingredient }
+              onChange={ handleChecked }
+            />
+          </label>
+        </div>
+
       ))}
 
       <button
         type="button"
+        disabled={ !abillityFinish }
+        className="button-position"
         data-testid="finish-recipe-btn"
         onClick={ handleClick }
       >
@@ -82,6 +119,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
 
 RecipeInProgress.propTypes = {
   match: PropTypes.shape({
+    url: PropTypes.string,
     path: PropTypes.string,
     params: PropTypes.shape({
       id: PropTypes.string,
