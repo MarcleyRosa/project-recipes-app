@@ -72,7 +72,7 @@ describe('Testa o componente recipes', () => {
     allSteps.forEach((step) => {
       expect(step).toBeChecked();
     });
-    userEvent.click(finishRecipe);
+    userEvent.click(screen.getByTestId('finish-recipe-btn'));
     expect(history.location.pathname).toBe('/done-recipes');
     history.push('/drinks/178319');
     expect(startButton).not.toBeInTheDocument();

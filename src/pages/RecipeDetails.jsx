@@ -3,18 +3,13 @@ import PropTypes from 'prop-types';
 import '../App.css';
 import Buttons from '../components/Buttons';
 import RecipesContext from '../context/RecipesContext';
-
-const mudaFunção = () => {
-  if (!JSON.parse(localStorage.getItem('inProgressRecipes'))) {
-    localStorage.setItem('inProgressRecipes', JSON.stringify({ meals: {}, drinks: {} }));
-  }
-  return JSON.parse(localStorage.getItem('inProgressRecipes'));
-};
+import requestLocalStorage from '../tests/helpers/requestLocalStorage';
 
 function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const { detailsAPI, setDetailsAPI } = useContext(RecipesContext);
   const [recommendation, setRecommendation] = useState([]);
-  const [requestInProgress, setRequestInProgress] = useState(mudaFunção());
+  const [requestInProgress,
+    setRequestInProgress] = useState(requestLocalStorage());
 
   const route = path.includes('meals');
 
