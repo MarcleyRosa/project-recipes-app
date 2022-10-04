@@ -34,6 +34,8 @@ function Buttons({ linkCopy, route }) {
     image: detailsAPI[`str${domain}Thumb`],
   };
 
+  console.log(linkCopy);
+
   const shareClick = () => {
     copy(`http://localhost:3000${linkCopy}`);
     setIsShare(true);
