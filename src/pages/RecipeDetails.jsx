@@ -72,7 +72,6 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
           [identRecipe]: { ...prevIds,
             [detailsAPI[idRecipe]]: ingredients } }));
     }
-    // localStorage.setItem('itemDetails', JSON.stringify(detailsAPI));
   }, [detailsAPI]);
 
   const handleClickStart = () => {
