@@ -59,7 +59,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
   const requestChecked = checkbox ? requestingredients?.map((check) => checkbox
     .some((loc) => loc === check)) : false;
 
-  const abillityFinish = requestChecked.every((check) => check === true);
+  const abillityFinish = requestChecked?.every((check) => check === true);
 
   console.log(abillityFinish);
 
