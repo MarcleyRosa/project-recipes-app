@@ -4,7 +4,7 @@ import RecipesContext from '../context/RecipesContext';
 import Buttons from '../components/Buttons';
 import '../App.css';
 
-function RecipeInProgress({ history, match: { url, path, params: { id } } }) {
+function RecipeInProgress({ history, match: { path, params: { id } } }) {
   const { typeInProgress, setDetailsAPI, detailsAPI } = useContext(RecipesContext);
 
   const route = path.includes('meals');
