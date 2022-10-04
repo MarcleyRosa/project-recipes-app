@@ -47,19 +47,20 @@ function Recipes({ typeAPI, domain }) {
 
   return (
     <div>
-      { categoryAPI[typeAPI]?.map((category, index) => (
-        index < maxRenderCategory && (
-          <button
-            data-testid={ `${category.strCategory}-category-filter` }
-            key={ index }
-            type="button"
-            onClick={ () => categoryClick(category.strCategory) }
-          >
-            {category.strCategory}
-
-          </button>
-        )
-      ))}
+      <div>
+        { categoryAPI[typeAPI]?.map((category, index) => (
+          index < maxRenderCategory && (
+            <button
+              data-testid={ `${category.strCategory}-category-filter` }
+              key={ index }
+              type="button"
+              onClick={ () => categoryClick(category.strCategory) }
+            >
+              {category.strCategory}
+            </button>
+          )
+        ))}
+      </div>
       <button
         onClick={ () => setIsRequest((prevState) => !prevState) }
         data-testid="All-category-filter"
@@ -68,21 +69,23 @@ function Recipes({ typeAPI, domain }) {
         ALL
 
       </button>
-      { requestAPI[typeAPI]?.map((recipe, index) => (
-        index <= maxRenderRecipe && (
-          <Link to={ `/${typeAPI}/${recipe[ids]}` }>
-            <div key={ index } data-testid={ `${index}-recipe-card` }>
-              <p data-testid={ `${index}-card-name` }>{recipe[nameRecipe]}</p>
-              <img
-                className="img"
-                src={ recipe[thumb] }
-                alt=""
-                data-testid={ `${index}-card-img` }
-              />
-            </div>
-          </Link>
-        )
-      ))}
+      <div>
+        { requestAPI[typeAPI]?.map((recipe, index) => (
+          index <= maxRenderRecipe && (
+            <Link key={ index } to={ `/${typeAPI}/${recipe[ids]}` }>
+              <div data-testid={ `${index}-recipe-card` }>
+                <p data-testid={ `${index}-card-name` }>{recipe[nameRecipe]}</p>
+                <img
+                  className="img"
+                  src={ recipe[thumb] }
+                  alt=""
+                  data-testid={ `${index}-card-img` }
+                />
+              </div>
+            </Link>
+          )
+        ))}
+      </div>
     </div>
   );
 }
