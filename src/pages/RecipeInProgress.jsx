@@ -33,7 +33,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
   }, []);
 
   const recInProgress = JSON.parse(localStorage
-    .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
+    .getItem('inProgressRecipes')) || {};
 
   const requestingredients = Object.entries(detailsAPI)
     .filter((e) => e[0].includes('strIngredient'))

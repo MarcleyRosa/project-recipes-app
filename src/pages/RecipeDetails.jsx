@@ -4,11 +4,17 @@ import '../App.css';
 import Buttons from '../components/Buttons';
 import RecipesContext from '../context/RecipesContext';
 
+const mudaFunção = () => {
+  if (!JSON.parse(localStorage.getItem('inProgressRecipes'))) {
+    localStorage.setItem('inProgressRecipes', JSON.stringify({ meals: {}, drinks: {} }));
+  }
+  return JSON.parse(localStorage.getItem('inProgressRecipes'));
+};
+
 function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const { detailsAPI, setDetailsAPI } = useContext(RecipesContext);
   const [recommendation, setRecommendation] = useState([]);
-  const [requestInProgress, setRequestInProgress] = useState(JSON
-    .parse(localStorage.getItem('inProgressRecipes')) || {});
+  const [requestInProgress, setRequestInProgress] = useState(mudaFunção());
 
   const route = path.includes('meals');
 
