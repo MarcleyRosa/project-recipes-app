@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import RecipesContext from '../context/RecipesContext';
 import Buttons from '../components/Buttons';
 import '../App.css';
+import requestLocalStorage from '../tests/helpers/requestLocalStorage';
 
 function RecipeInProgress({ history, match: { path, params: { id } } }) {
-  const { typeInProgress, setDetailsAPI, detailsAPI } = useContext(RecipesContext);
-  console.log(history);
+  const { setDetailsAPI, detailsAPI } = useContext(RecipesContext);
 
   const route = path.includes('meals');
 
@@ -33,8 +33,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
     if (checkedSave[typeRecipe]) setCheckbox(checkedSave[typeRecipe][id]);
   }, []);
 
-  const recInProgress = JSON.parse(localStorage
-    .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
+  const recInProgress = requestLocalStorage();
 
   const requestingredients = Object.entries(detailsAPI)
     .filter((e) => e[0].includes('strIngredient'))
@@ -57,12 +56,10 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
 
   const isSelect = (ingredient) => checkbox?.some((check) => check === ingredient);
 
-  const requestChecked = checkbox ? requestingredients?.map((check) => checkbox
-    .some((loc) => loc === check)) : false;
+  const requestChecked = checkbox && requestingredients?.map((check) => checkbox
+    .some((loc) => loc === check));
 
   const abillityFinish = requestChecked?.every((check) => check === true);
-
-  console.log(abillityFinish);
 
   const handleClick = () => {
     const newObj = {
@@ -71,8 +68,8 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
       nationality: typeRecipe === 'meals' ? detailsAPI.strArea : '',
       category: typeRecipe === 'meals' ? detailsAPI.strCategory : '',
       alcoholicOrNot: typeRecipe === 'drinks' ? detailsAPI.strAlcoholic : '',
-      name: typeInProgress === 'drinks' ? detailsAPI.strDrink : detailsAPI.strMeal,
-      image: typeInProgress === 'drinks'
+      name: typeRecipe === 'drinks' ? detailsAPI.strDrink : detailsAPI.strMeal,
+      image: typeRecipe === 'drinks'
         ? detailsAPI.strDrinkThumb : detailsAPI.strMealThumb,
       doneDate: detailsAPI.dateModified === null ? '' : detailsAPI.dateModified,
       tags: detailsAPI.strTags !== null ? detailsAPI.strTags.split(',') : [],
@@ -87,18 +84,17 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
   return (
     <div>
       <p data-testid="recipe-title">
-        { typeInProgress === 'drinks' ? detailsAPI.strDrink : detailsAPI.strMeal }
+        { detailsAPI.strDrink || detailsAPI.strMeal }
       </p>
       <img
         className="img"
-        src={ typeInProgress === 'drinks'
-          ? detailsAPI.strDrinkThumb : detailsAPI.strMealThumb }
+        src={ detailsAPI.strDrinkThumb || detailsAPI.strMealThumb }
         alt=""
         data-testid="recipe-photo"
       />
       <Buttons linkCopy={ urlCopy } route={ route } />
       <h3 data-testid="recipe-category">{detailsAPI.strCategory}</h3>
-      { typeInProgress === 'drinks' && <p>{detailsAPI.strAlcoholic}</p> }
+      { detailsAPI.strAlcoholic && <p>{detailsAPI.strAlcoholic}</p> }
       <p data-testid="instructions">{detailsAPI.strInstructions}</p>
 
       { requestingredients?.map((ingredient, index) => (
@@ -112,7 +108,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
             <input
               id={ `${index}-ingredients` }
               type="checkbox"
-              checked={ requestChecked[index] !== String ? requestChecked[index] : false }
+              checked={ requestChecked[index] !== String && requestChecked[index] }
               name={ ingredient }
               onChange={ handleChecked }
             />

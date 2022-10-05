@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import '../App.css';
 import Buttons from '../components/Buttons';
 import RecipesContext from '../context/RecipesContext';
+import requestLocalStorage from '../tests/helpers/requestLocalStorage';
 
 function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const { detailsAPI, setDetailsAPI } = useContext(RecipesContext);
   const [recommendation, setRecommendation] = useState([]);
-  const [requestInProgress, setRequestInProgress] = useState(JSON
-    .parse(localStorage.getItem('inProgressRecipes')) || {});
+  const [requestInProgress,
+    setRequestInProgress] = useState(requestLocalStorage());
 
   const route = path.includes('meals');
 
