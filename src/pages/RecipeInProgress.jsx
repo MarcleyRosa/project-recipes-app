@@ -62,6 +62,22 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
   const abillityFinish = requestChecked?.every((check) => check === true);
 
   const handleClick = () => {
+    const newObj = {
+      id,
+      type: typeRecipe === 'meals' ? 'meal' : 'drink',
+      nationality: typeRecipe === 'meals' ? detailsAPI.strArea : '',
+      category: typeRecipe === 'meals' ? detailsAPI.strCategory : '',
+      alcoholicOrNot: typeRecipe === 'drinks' ? detailsAPI.strAlcoholic : '',
+      name: typeRecipe === 'drinks' ? detailsAPI.strDrink : detailsAPI.strMeal,
+      image: typeRecipe === 'drinks'
+        ? detailsAPI.strDrinkThumb : detailsAPI.strMealThumb,
+      doneDate: detailsAPI.dateModified === null ? '' : detailsAPI.dateModified,
+      tags: detailsAPI.strTags !== null ? detailsAPI.strTags.split(',') : [],
+      link: urlCopy,
+    };
+    const getStorage = JSON.parse(localStorage.getItem('doneRecipes'));
+    const enterStorage = getStorage === null || undefined ? [] : getStorage;
+    localStorage.setItem('doneRecipes', JSON.stringify([...enterStorage, newObj]));
     history.push('/done-recipes');
   };
 
