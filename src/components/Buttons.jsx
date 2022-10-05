@@ -8,18 +8,20 @@ import RecipesContext from '../context/RecipesContext';
 
 const copy = require('clipboard-copy');
 
-function Buttons({ linkCopy, route }) {
-  const { detailsAPI } = useContext(RecipesContext);
+function Buttons({ linkCopy, route, indexData, targetId }) {
+  const { detailsAPI, arrayFavorite, setArrayFavorite } = useContext(RecipesContext);
   const [isShare, setIsShare] = useState(false);
   const history = useHistory();
   const [isFavorite, setIsFavorite] = useState(false);
-  const [arrayFavorite, setArrayFavorite] = useState(JSON
-    .parse(localStorage.getItem('favoriteRecipes')) || []);
 
   const ids = history.location.pathname.split('/')[2];
 
   const domain = route ? 'Meal' : 'Drink';
   const typeRec = route ? 'meal' : 'drink';
+
+  const routeFav = history.location.pathname.includes('favorite-recipes');
+
+  const dataTestIdRoute = routeFav ? `${indexData}-horizontal-` : '';
 
   const alcolicOrNo = detailsAPI.strAlcoholic || '';
   const nation = detailsAPI.strArea || '';
@@ -34,27 +36,33 @@ function Buttons({ linkCopy, route }) {
     image: detailsAPI[`str${domain}Thumb`],
   };
 
-  console.log(linkCopy);
+  const routeShare = `${[detailsAPI[`id${domain}`]]}${[typeRec]}`;
 
-  const shareClick = () => {
+  const shareClick = ({ target }) => {
     copy(`http://localhost:3000${linkCopy}`);
     setIsShare(true);
+    console.log(target);
   };
 
-  // useEffect(() => {}, []);
-
   useEffect(() => {
-    setIsFavorite(arrayFavorite?.some((fav) => +fav.id === +ids));
+    if (routeFav) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(arrayFavorite?.some((fav) => +fav.id === +ids));
+    }
     localStorage.setItem('favoriteRecipes', JSON.stringify(arrayFavorite));
   }, [arrayFavorite]);
 
   const favoriteClick = () => {
-    if (isFavorite && favoriteRecipe.id) {
+    if ((isFavorite && favoriteRecipe.id) || routeFav) {
       const requestFavorite = arrayFavorite
-        .filter((fav) => +fav.id !== +ids);
+        .filter((fav) => +fav.id !== (+ids || +targetId));
       setArrayFavorite(requestFavorite);
     } else if (favoriteRecipe.id) {
       setArrayFavorite((prevState) => [...prevState, favoriteRecipe]);
+    }
+    if (arrayFavorite.length === 1) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([]));
     }
   };
 
@@ -63,16 +71,17 @@ function Buttons({ linkCopy, route }) {
       <button
         onClick={ shareClick }
         type="button"
-        data-testid="share-btn"
+        src={ shareIcon }
+        data-testid={ `${dataTestIdRoute}share-btn` }
       >
-        <img src={ shareIcon } alt="" />
+        <img id={ routeShare } src={ shareIcon } alt="" />
 
       </button>
 
       <button
         onClick={ favoriteClick }
         type="button"
-        data-testid="favorite-btn"
+        data-testid={ `${dataTestIdRoute}favorite-btn` }
         src={ isFavorite ? yesFavorite : notFavorite }
       >
         <img src={ isFavorite ? yesFavorite : notFavorite } alt="" />
@@ -85,7 +94,15 @@ function Buttons({ linkCopy, route }) {
 
 Buttons.propTypes = {
   linkCopy: PropTypes.string.isRequired,
-  route: PropTypes.bool.isRequired,
+  route: PropTypes.bool,
+  indexData: PropTypes.func,
+  targetId: PropTypes.func,
+};
+
+Buttons.defaultProps = {
+  targetId: PropTypes.func,
+  route: PropTypes.bool,
+  indexData: PropTypes.func,
 };
 
 export default Buttons;

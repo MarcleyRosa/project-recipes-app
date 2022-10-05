@@ -49,10 +49,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     recipe.id === id
   ));
 
-  const localStorageInProg = localStorage
-    .getItem('inProgressRecipes')
-    ? Object.keys(JSON.parse(localStorage
-      .getItem('inProgressRecipes'))[identRecipe]) : [];
+  const localStorageInProg = Object.keys(requestLocalStorage()[identRecipe]);
 
   const idInProgress = localStorageInProg?.some((recipe) => (
     +recipe === +id
