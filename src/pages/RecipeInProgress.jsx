@@ -108,7 +108,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
             <input
               id={ `${index}-ingredients` }
               type="checkbox"
-              checked={ requestChecked[index] !== String && requestChecked[index] }
+              checked={ requestChecked[index] !== String ? requestChecked[index] : false }
               name={ ingredient }
               onChange={ handleChecked }
             />

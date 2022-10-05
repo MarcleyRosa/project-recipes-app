@@ -13,6 +13,8 @@ function RecipesProvider({ children }) {
   const [targetCategory, setTargetCategory] = useState('');
   const [typeInProgress, setTypeInProgress] = useState('');
   const [detailsAPI, setDetailsAPI] = useState([]);
+  const [arrayFavorite, setArrayFavorite] = useState(JSON
+    .parse(localStorage.getItem('favoriteRecipes')) || []);
 
   const contextType = { state,
     setState,
@@ -34,6 +36,8 @@ function RecipesProvider({ children }) {
     setTypeInProgress,
     detailsAPI,
     setDetailsAPI,
+    arrayFavorite,
+    setArrayFavorite,
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import '../App.css';
+import Carousel from 'react-bootstrap/Carousel';
 import Buttons from '../components/Buttons';
 import RecipesContext from '../context/RecipesContext';
 import requestLocalStorage from '../tests/helpers/requestLocalStorage';
@@ -27,8 +28,6 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const urlDetails = `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${id}`;
   const urlRecommendation = `https://www.${domainRec}.com/api/json/v1/1/search.php?s=`;
 
-  const maxNumberRecomendation = 6;
-
   useEffect(() => {
     const fetchAPI = async () => {
       const response = await fetch(urlDetails);
@@ -50,10 +49,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     recipe.id === id
   ));
 
-  const localStorageInProg = localStorage
-    .getItem('inProgressRecipes')
-    ? Object.keys(JSON.parse(localStorage
-      .getItem('inProgressRecipes'))[identRecipe]) : [];
+  const localStorageInProg = Object.keys(requestLocalStorage()[identRecipe]);
 
   const idInProgress = localStorageInProg?.some((recipe) => (
     +recipe === +id
@@ -80,6 +76,8 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     setRequestInProgress({});
     history.push(`/${identRecipe}/${id}/in-progress`);
   };
+
+  const choisen = recommendation[typeRecomendation];
 
   return (
     <div className="mealsContainer">
@@ -113,17 +111,33 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
         frameBorder="0"
       /> }
       <h4>Recomendações</h4>
-      <div className="details-card">
-        { recommendation[typeRecomendation]?.map((card, index) => (
-          index < maxNumberRecomendation && (
-            <div
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <p data-testid={ `${index}-recommendation-title` }>{ card[nameRecipe]}</p>
-            </div>
-          )
-        ))}
+      <div>
+        <Carousel className="details-card">
+          { ['0', '2', '4'].map((card, index) => (
+            <Carousel.Item key={ index }>
+              <div data-testid={ `${+card}-recommendation-card` }>
+                <p data-testid={ `${+card}-recommendation-title` }>
+                  { choisen && choisen[+card][nameRecipe]}
+                </p>
+                <img
+                  className="img"
+                  src={ choisen && choisen[+card][thumb] }
+                  alt="img"
+                />
+              </div>
+              <div data-testid={ `${+card + 1}-recommendation-card` }>
+                <p data-testid={ `${+card + 1}-recommendation-title` }>
+                  { choisen && choisen[+card + 1][nameRecipe]}
+                </p>
+                <img
+                  className="img"
+                  src={ choisen && choisen[+card + 1][thumb] }
+                  alt="img"
+                />
+              </div>
+            </Carousel.Item>
+          ))}
+        </Carousel>
       </div>
       { !doneRecipe && (
         <button
