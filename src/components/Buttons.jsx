@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -14,12 +15,14 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
   const history = useHistory();
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const ids = history.location.pathname.split('/')[2];
+  const { location: { pathname, idLink } } = history;
+
+  const ids = idLink || pathname.split('/')[2];
 
   const domain = route ? 'Meal' : 'Drink';
   const typeRec = route ? 'meal' : 'drink';
 
-  const routeFav = history.location.pathname.includes('favorite-recipes');
+  const routeFav = pathname.includes('favorite-recipes');
 
   const dataTestIdRoute = routeFav ? `${indexData}-horizontal-` : '';
 

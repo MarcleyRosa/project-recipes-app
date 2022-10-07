@@ -27,32 +27,26 @@ describe('Testa a meals', () => {
     renderPath('/meals');
     const pageElement = screen.getByRole('heading', { name: /meals/i, level: 1 });
     expect(pageElement).toBeInTheDocument();
-
     const searchButton = screen.getByTestId(elementSearch);
 
     userEvent.click(searchButton);
     const inputSearch = screen.getByTestId(elementInput);
     expect(inputSearch).toBeInTheDocument();
-
     const ingredientRadio = screen.getByTestId('ingredient-search-radio');
     const nameRadio = screen.getByTestId(elementNameRadio);
     const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
 
     const sendButton = screen.getByTestId(elementButton);
-
     userEvent.type(inputSearch, 'Onion');
     userEvent.click(ingredientRadio);
     userEvent.click(sendButton);
-
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(3));
 
     const ingredientElement = await screen.findByTestId(cardImg);
     expect(ingredientElement).toBeInTheDocument();
-
     userEvent.type(inputSearch, 'Chicken');
     userEvent.click(nameRadio);
     userEvent.click(sendButton);
-
     const nameElement = await screen.findByTestId(cardImg);
     expect(nameElement).toBeInTheDocument();
 
@@ -73,17 +67,12 @@ describe('Testa meals', () => {
     const { history } = renderPath('/meals');
     const pageElement = screen.getByRole('heading', { name: /meals/i, level: 1 });
     expect(pageElement).toBeInTheDocument();
-
     const searchButton = screen.getByTestId(elementSearch);
-
     userEvent.click(searchButton);
     const inputSearch = screen.getByTestId(elementInput);
     expect(inputSearch).toBeInTheDocument();
-
     const nameRadio = screen.getByTestId(elementNameRadio);
-
     const sendButton = screen.getByTestId(elementButton);
-
     userEvent.type(inputSearch, 'Corba');
     userEvent.click(nameRadio);
     userEvent.click(sendButton);
@@ -127,9 +116,7 @@ describe('Testa o componente recipes', () => {
         .mockResolvedValueOnce(drinks),
     });
     const { history } = renderPath(path);
-
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
-
     const firstIngredient = await screen.findByText(/penne rigate/i);
     expect(firstIngredient).toBeInTheDocument();
     window.document.execCommand = jest.fn().mockImplementation(() => 'copied');
@@ -161,6 +148,13 @@ describe('Testa o componente recipes', () => {
     });
     userEvent.click(screen.getByTestId('finish-recipe-btn'));
     expect(history.location.pathname).toBe('/done-recipes');
+
+    const buttonShare = screen.getByTestId('0-horizontal-share-btn');
+    userEvent.click(buttonShare);
+    const buttonFilter = screen.getByRole('button', { name: /drinks/i });
+
+    userEvent.click(buttonFilter);
+
     history.push(path);
     expect(startButton).not.toBeInTheDocument();
   });

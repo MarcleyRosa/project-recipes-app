@@ -14,6 +14,18 @@ const mockStorage = [
   },
 ];
 
+const mockStorageDrinks = [
+  {
+    alcoholicOrNot: 'Alcoholic',
+    category: 'Cocktail',
+    id: '17222',
+    image: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
+    name: 'A1',
+    nationality: '',
+    type: 'drink',
+  },
+];
+
 describe('Testa a aplicação', () => {
   test('Tela de profile', () => {
     renderPath('/profile');
@@ -45,6 +57,24 @@ describe('Testa a aplicação', () => {
     expect(favoriteRecipe).toBeInTheDocument();
     const favoriteButton = screen.getByTestId('0-horizontal-favorite-btn');
     userEvent.click(favoriteButton);
+
+    const buttonFilter = screen.getByRole('button', { name: /meals/i });
+    const buttonFilterDrinks = screen.getByRole('button', { name: /drinks/i });
+
+    userEvent.click(buttonFilter);
+    userEvent.click(buttonFilterDrinks);
+    const buttonAll = screen.getByRole('button', { name: /all/i });
+    userEvent.click(buttonAll);
     /* expect(favoriteRecipe).not.toBeInTheDocument(); */
+  });
+  test('Favorite Drinks', () => {
+    jest.spyOn(localStorage, 'setItem');
+    localStorage.setItem('favoriteRecipes', JSON.stringify(mockStorageDrinks));
+
+    renderPath('favorite-recipes');
+
+    const buttonFilter = screen.getByRole('button', { name: /drinks/i });
+
+    userEvent.click(buttonFilter);
   });
 });

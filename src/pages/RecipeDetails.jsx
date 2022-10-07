@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import '../App.css';
@@ -20,10 +21,13 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
 
   const title = route ? 'strMeal' : 'strDrink';
   const thumb = route ? 'strMealThumb' : 'strDrinkThumb';
+  const thumbRecomen = route ? 'strDrinkThumb' : 'strMealThumb';
 
   const domainRec = route ? 'thecocktaildb' : 'themealdb';
   const typeRecomendation = route ? 'drinks' : 'meals';
   const nameRecipe = route ? 'strDrink' : 'strMeal';
+
+  const embedYouTube = detailsAPI?.strYoutube?.split('watch?v=');
 
   const urlDetails = `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${id}`;
   const urlRecommendation = `https://www.${domainRec}.com/api/json/v1/1/search.php?s=`;
@@ -107,33 +111,35 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
         width="420"
         height="315"
         data-testid="video"
-        src={ detailsAPI.strYoutube }
+        src={ embedYouTube && `${embedYouTube[0]}embed/${embedYouTube[1]}` }
         frameBorder="0"
       /> }
       <h4>Recomendações</h4>
       <div>
-        <Carousel className="details-card">
+        <Carousel>
           { ['0', '2', '4'].map((card, index) => (
             <Carousel.Item key={ index }>
-              <div data-testid={ `${+card}-recommendation-card` }>
-                <p data-testid={ `${+card}-recommendation-title` }>
-                  { choisen && choisen[+card][nameRecipe]}
-                </p>
-                <img
-                  className="img"
-                  src={ choisen && choisen[+card][thumb] }
-                  alt="img"
-                />
-              </div>
-              <div data-testid={ `${+card + 1}-recommendation-card` }>
-                <p data-testid={ `${+card + 1}-recommendation-title` }>
-                  { choisen && choisen[+card + 1][nameRecipe]}
-                </p>
-                <img
-                  className="img"
-                  src={ choisen && choisen[+card + 1][thumb] }
-                  alt="img"
-                />
+              <div className="details-card">
+                <div data-testid={ `${+card}-recommendation-card` }>
+                  <p data-testid={ `${+card}-recommendation-title` }>
+                    { choisen && choisen[+card][nameRecipe]}
+                  </p>
+                  <img
+                    className="img"
+                    src={ choisen && choisen[+card][thumbRecomen] }
+                    alt="img"
+                  />
+                </div>
+                <div data-testid={ `${+card + 1}-recommendation-card` }>
+                  <p data-testid={ `${+card + 1}-recommendation-title` }>
+                    { choisen && choisen[+card + 1][nameRecipe]}
+                  </p>
+                  <img
+                    className="img"
+                    src={ choisen && choisen[+card + 1][thumbRecomen] }
+                    alt="img"
+                  />
+                </div>
               </div>
             </Carousel.Item>
           ))}
