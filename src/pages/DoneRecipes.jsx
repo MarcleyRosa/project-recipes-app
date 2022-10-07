@@ -5,14 +5,12 @@ import shareIcon from '../images/shareIcon.svg';
 
 const copy = require('clipboard-copy');
 
-function DoneRecipes(props) {
+function DoneRecipes() {
   const [isShare, setIsShare] = useState(false);
   const getStorage = JSON.parse(localStorage.getItem('doneRecipes'));
   const array = getStorage === null ? [] : getStorage;
   const [filter, setFilter] = useState(array);
   const title = 'Done Recipes';
-
-  console.log(props);
 
   const shareClick = ({ target }) => {
     const { name } = target;
