@@ -100,7 +100,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
       { requestingredients?.map((ingredient, index) => (
         <div key={ index }>
           <label
-            className={ isSelect(ingredient) && 'riscar' }
+            className={ isSelect(ingredient) ? 'riscar' : 'noRiscar' }
             htmlFor={ `${index}-ingredients` }
             data-testid={ `${index}-ingredient-step` }
           >
@@ -108,7 +108,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
             <input
               id={ `${index}-ingredients` }
               type="checkbox"
-              checked={ requestChecked[index] !== String ? requestChecked[index] : false }
+              checked={ requestChecked && requestChecked[index] }
               name={ ingredient }
               onChange={ handleChecked }
             />

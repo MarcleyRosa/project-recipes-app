@@ -5,12 +5,14 @@ import shareIcon from '../images/shareIcon.svg';
 
 const copy = require('clipboard-copy');
 
-function DoneRecipes() {
+function DoneRecipes(props) {
   const [isShare, setIsShare] = useState(false);
   const getStorage = JSON.parse(localStorage.getItem('doneRecipes'));
   const array = getStorage === null ? [] : getStorage;
   const [filter, setFilter] = useState(array);
   const title = 'Done Recipes';
+
+  console.log(props);
 
   const shareClick = ({ target }) => {
     const { name } = target;
@@ -20,11 +22,9 @@ function DoneRecipes() {
 
   const filterClick = ({ target }) => {
     const { name } = target;
-    if (filter.length > 0) {
-      const newFilter = array.filter((ele) => ele.type === name);
-      const saveFilter = name === 'all' ? array : newFilter;
-      setFilter(saveFilter);
-    }
+
+    const newFilter = array.filter((ele) => ele.type === name);
+    setFilter(newFilter);
   };
 
   return (
@@ -51,28 +51,26 @@ function DoneRecipes() {
       <button
         type="button"
         name="all"
-        onClick={ filterClick }
+        onClick={ () => setFilter(array) }
         data-testid="filter-by-all-btn"
       >
         All
       </button>
 
-      {filter.map((rec, index) => (
+      {filter?.map((rec, index) => (
         <div key={ index }>
-          <Link to={ rec.link }>
+          <p data-testid={ `${index}-horizontal-top-text` }>
+            { rec.type === 'meal'
+              ? `${rec.nationality} - ${rec.category}`
+              : rec.alcoholicOrNot }
+          </p>
+          <Link to={ { pathname: `/${rec.type}s/${rec.id}`, idLink: rec } }>
             <img
               src={ rec.image }
               alt={ rec.name }
               width="100px"
               data-testid={ `${index}-horizontal-image` }
             />
-          </Link>
-          <p data-testid={ `${index}-horizontal-top-text` }>
-            { rec.type === 'meal'
-              ? `${rec.nationality} - ${rec.category}`
-              : rec.alcoholicOrNot }
-          </p>
-          <Link to={ rec.link }>
             <p data-testid={ `${index}-horizontal-name` }>{ rec.name }</p>
           </Link>
           <p data-testid={ `${index}-horizontal-done-date` }>{ rec.doneDate }</p>
@@ -82,7 +80,11 @@ function DoneRecipes() {
             onClick={ shareClick }
             data-testid={ `${index}-horizontal-share-btn` }
           >
-            <img src={ shareIcon } alt="share button" name={ rec.link } />
+            <img
+              src={ shareIcon }
+              alt="share button"
+              name={ `/${rec.type}s/${rec.id}` }
+            />
           </button>
           { rec.tags.map((ele) => (
             <p key={ ele } data-testid={ `${index}-${ele}-horizontal-tag` }>{ ele }</p>

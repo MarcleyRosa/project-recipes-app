@@ -72,7 +72,10 @@ function Recipes({ typeAPI, domain }) {
       <div>
         { requestAPI[typeAPI]?.map((recipe, index) => (
           index <= maxRenderRecipe && (
-            <Link key={ index } to={ `/${typeAPI}/${recipe[ids]}` }>
+            <Link
+              key={ index }
+              to={ { pathname: `/${typeAPI}/${recipe[ids]}`, idLink: recipe[ids] } }
+            >
               <div data-testid={ `${index}-recipe-card` }>
                 <p data-testid={ `${index}-card-name` }>{recipe[nameRecipe]}</p>
                 <img
