@@ -17,9 +17,7 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
 
   const { location: { pathname, idLink } } = history;
 
-  console.log(history);
-
-  const ids = pathname.split('/')[2] || idLink;
+  const ids = idLink || pathname.split('/')[2];
 
   const domain = route ? 'Meal' : 'Drink';
   const typeRec = route ? 'meal' : 'drink';
