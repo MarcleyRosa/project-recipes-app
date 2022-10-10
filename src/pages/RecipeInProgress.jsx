@@ -48,7 +48,11 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
 
   const handleChecked = ({ target: { checked, name } }) => {
     if (checked) {
-      setCheckbox((prevState) => [...prevState, name]);
+      if (checkbox.length === 0) {
+        setCheckbox([name]);
+      } else {
+        setCheckbox((prevState) => [...prevState, name]);
+      }
     } else {
       const removeChecked = checkbox.filter((ingredient) => ingredient !== name);
       setCheckbox(removeChecked);

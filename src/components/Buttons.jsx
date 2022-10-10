@@ -41,10 +41,9 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
 
   const routeShare = `${[detailsAPI[`id${domain}`]]}${[typeRec]}`;
 
-  const shareClick = ({ target }) => {
+  const shareClick = () => {
     copy(`http://localhost:3000${linkCopy}`);
     setIsShare(true);
-    console.log(target);
   };
 
   useEffect(() => {
