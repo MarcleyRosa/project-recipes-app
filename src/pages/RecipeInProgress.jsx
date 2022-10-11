@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import RecipesContext from '../context/RecipesContext';
@@ -19,12 +18,11 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
 
   const urlDetails = `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${id}`;
 
-  const checkedSave = JSON.parse(localStorage
-    .getItem('checkedInProgress')) || {};
-
   const [checkbox, setCheckbox] = useState([]);
 
   useEffect(() => {
+    const checkedSave = JSON.parse(localStorage
+      .getItem('checkedInProgress')) || {};
     const fetchAPI = async () => {
       const response = await fetch(urlDetails);
       const json = await response.json();
@@ -32,7 +30,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
     };
     fetchAPI();
     if (checkedSave[typeRecipe]) setCheckbox(checkedSave[typeRecipe][id]);
-  }, []);
+  }, [setDetailsAPI, id, typeRecipe, urlDetails]);
 
   const recInProgress = requestLocalStorage();
 
@@ -44,15 +42,11 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
     const itensChecked = { [typeRecipe]: { ...recInProgress[typeRecipe],
       [id]: checkbox } };
     localStorage.setItem('checkedInProgress', JSON.stringify(itensChecked));
-  }, [detailsAPI, checkbox]);
+  }, [detailsAPI, checkbox, id, recInProgress, typeRecipe]);
 
   const handleChecked = ({ target: { checked, name } }) => {
     if (checked) {
-      if (checkbox.length === 0) {
-        setCheckbox([name]);
-      } else {
-        setCheckbox((prevState) => [...prevState, name]);
-      }
+      setCheckbox((prevState) => [...prevState, name]);
     } else {
       const removeChecked = checkbox.filter((ingredient) => ingredient !== name);
       setCheckbox(removeChecked);
