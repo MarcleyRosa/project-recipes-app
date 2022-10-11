@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import '../App.css';
@@ -45,7 +44,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
       setRecommendation(json);
     };
     fetchRecomendation();
-  }, []);
+  }, [identRecipe, setDetailsAPI, urlDetails, urlRecommendation]);
 
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
 
@@ -73,7 +72,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
           [identRecipe]: { ...prevIds,
             [detailsAPI[idRecipe]]: ingredients } }));
     }
-  }, [detailsAPI]);
+  }, [detailsAPI, idRecipe, identRecipe, ingredients, requestInProgress]);
 
   const handleClickStart = () => {
     localStorage.setItem('inProgressRecipes', JSON.stringify(requestInProgress));
