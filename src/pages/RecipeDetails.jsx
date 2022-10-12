@@ -72,7 +72,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
           [identRecipe]: { ...prevIds,
             [detailsAPI[idRecipe]]: ingredients } }));
     }
-  }, [detailsAPI, idRecipe, ingredients]);
+  }, [detailsAPI]);
 
   const handleClickStart = () => {
     localStorage.setItem('inProgressRecipes', JSON.stringify(requestInProgress));
