@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -14,7 +13,7 @@ function Meals() {
   useEffect(() => {
     setUrlSelect(urlMeals);
     setIsRequest((prevState) => !prevState);
-  }, []);
+  }, [setUrlSelect, setIsRequest]);
 
   return (
     <div className="mealsContainer">
