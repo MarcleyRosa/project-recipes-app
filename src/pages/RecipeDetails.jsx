@@ -44,7 +44,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
       setRecommendation(json);
     };
     fetchRecomendation();
-  }, [identRecipe, setDetailsAPI, urlDetails, urlRecommendation]);
+  }, []);
 
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
 
