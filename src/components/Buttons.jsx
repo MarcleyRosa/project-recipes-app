@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -53,7 +52,7 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
       setIsFavorite(arrayFavorite?.some((fav) => +fav.id === +ids));
     }
     localStorage.setItem('favoriteRecipes', JSON.stringify(arrayFavorite));
-  }, [arrayFavorite]);
+  }, [arrayFavorite, ids, routeFav]);
 
   const favoriteClick = () => {
     if ((isFavorite && favoriteRecipe.id) || routeFav) {
