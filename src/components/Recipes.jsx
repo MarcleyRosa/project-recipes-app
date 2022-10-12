@@ -24,7 +24,7 @@ function Recipes({ typeAPI, domain }) {
     };
     fetchAPI();
     setTypeInProgress(typeAPI);
-  }, []);
+  }, [setTypeInProgress, typeAPI, urlCategory]);
 
   useEffect(() => {
     const fetchAPI = async () => {
