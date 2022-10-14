@@ -40,7 +40,8 @@ function SearchBar({ domain, typeAPI }) {
       }
     };
     fetchApi();
-  }, [isRequest]);
+  }, [firstLetterLength, isRequest, nameSearch.length, searchInput,
+    setRequestAPI, setTargetCategory, urlSelect]);
 
   useEffect(() => {
     if (requestAPI[typeAPI]?.length === 1 && !targetCategory) {
