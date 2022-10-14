@@ -35,7 +35,7 @@ function Recipes({ typeAPI, domain }) {
       }
     };
     fetchAPI();
-  }, [targetCategory]);
+  });
 
   const categoryClick = (category) => {
     if (category === targetCategory) {
