@@ -9,6 +9,7 @@ function SearchBar({ domain, typeAPI }) {
     targetCategory, setTargetCategory } = useContext(RecipesContext);
 
   const [nameSearch, setNameSearch] = useState('');
+  const [change, setChange] = useState(false);
   const history = useHistory();
 
   const nameFirstLetter = nameSearch === 'first-letter';
@@ -30,18 +31,24 @@ function SearchBar({ domain, typeAPI }) {
   }, [nameSearch, domain, setUrlSelect]);
 
   useEffect(() => {
-    setTargetCategory('');
-    const fetchApi = async () => {
-      if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
-        const response = await fetch(`${urlSelect}${searchInput}`);
-        const json = await response.json();
-        if (json?.meals || json?.drinks) setRequestAPI(json);
-        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
-      }
-    };
-    fetchApi();
-  }, [firstLetterLength, isRequest, nameSearch.length, searchInput,
-    setRequestAPI, setTargetCategory, urlSelect]);
+    setChange(true);
+  }, [isRequest]);
+
+  useEffect(() => {
+    if (change) {
+      setTargetCategory('');
+      const fetchApi = async () => {
+        setChange(false);
+        if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
+          const response = await fetch(`${urlSelect}${searchInput}`);
+          const json = await response.json();
+          if (json?.meals || json?.drinks) setRequestAPI(json);
+          else global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        }
+      };
+      fetchApi();
+    }
+  });
 
   useEffect(() => {
     if (requestAPI[typeAPI]?.length === 1 && !targetCategory) {
