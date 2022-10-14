@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -28,7 +27,7 @@ function SearchBar({ domain, typeAPI }) {
       break;
     default: break;
     }
-  }, [nameSearch]);
+  }, [nameSearch, domain, setUrlSelect]);
 
   useEffect(() => {
     setTargetCategory('');
