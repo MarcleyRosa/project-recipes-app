@@ -47,7 +47,7 @@ function SearchBar({ domain, typeAPI }) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
-  }, [requestAPI, targetCategory]);
+  }, [requestAPI, targetCategory, history, typeAPI]);
 
   const handleClick = () => {
     if (nameFirstLetter && searchInput.length > 1) {
