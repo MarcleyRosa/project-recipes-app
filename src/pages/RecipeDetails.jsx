@@ -9,6 +9,7 @@ import requestLocalStorage from '../tests/helpers/requestLocalStorage';
 function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const { detailsAPI, setDetailsAPI } = useContext(RecipesContext);
   const [recommendation, setRecommendation] = useState([]);
+  const [change, setChange] = useState(false);
   const [requestInProgress,
     setRequestInProgress] = useState(requestLocalStorage());
 
@@ -65,6 +66,11 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
 
   useEffect(() => {
+    setChange(true);
+  }, [detailsAPI]);
+
+  const newChange = () => {
+    setChange(false);
     const prevIds = requestInProgress[identRecipe];
     if (requestInProgress && detailsAPI[idRecipe]) {
       setRequestInProgress((prevState) => (
@@ -72,7 +78,13 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
           [identRecipe]: { ...prevIds,
             [detailsAPI[idRecipe]]: ingredients } }));
     }
-  }, [detailsAPI]);
+  };
+
+  useEffect(() => {
+    if (change) {
+      newChange();
+    }
+  });
 
   const handleClickStart = () => {
     localStorage.setItem('inProgressRecipes', JSON.stringify(requestInProgress));
