@@ -67,7 +67,6 @@ function SearchBar({ domain, typeAPI }) {
   return (
     <div>
       <label htmlFor="ingredient">
-        Ingredient
         <input
           id="ingredient"
           type="radio"
@@ -76,9 +75,9 @@ function SearchBar({ domain, typeAPI }) {
           value="ingredient"
           onClick={ ({ target: { value } }) => setNameSearch(value) }
         />
+        Ingredient
       </label>
       <label htmlFor="name">
-        Name
         <input
           id="name"
           type="radio"
@@ -87,9 +86,9 @@ function SearchBar({ domain, typeAPI }) {
           value="name"
           onClick={ ({ target: { value } }) => setNameSearch(value) }
         />
+        Name
       </label>
       <label htmlFor="first-letter">
-        First letter
         <input
           id="first-letter"
           type="radio"
@@ -98,6 +97,7 @@ function SearchBar({ domain, typeAPI }) {
           value="first-letter"
           onClick={ ({ target: { value } }) => setNameSearch(value) }
         />
+        First letter
       </label>
       <button
         type="button"

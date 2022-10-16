@@ -17,7 +17,7 @@ function Drinks() {
   }, [setIsRequest, setUrlSelect]);
 
   return (
-    <div className="drinksContainer">
+    <div className="foodContainer">
       <Header headers={ title } isRoute />
       <SearchBar domain="thecocktaildb" typeAPI="drinks" />
       <Recipes typeAPI="drinks" domain="thecocktaildb" />

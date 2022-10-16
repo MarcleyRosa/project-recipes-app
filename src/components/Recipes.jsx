@@ -60,16 +60,15 @@ function Recipes({ typeAPI, domain }) {
             </button>
           )
         ))}
+        <button
+          onClick={ () => setIsRequest((prevState) => !prevState) }
+          data-testid="All-category-filter"
+          type="button"
+        >
+          ALL
+        </button>
       </div>
-      <button
-        onClick={ () => setIsRequest((prevState) => !prevState) }
-        data-testid="All-category-filter"
-        type="button"
-      >
-        ALL
-
-      </button>
-      <div>
+      <div className="recipes-container">
         { requestAPI[typeAPI]?.map((recipe, index) => (
           index <= maxRenderRecipe && (
             <Link
