@@ -95,7 +95,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const choisen = recommendation[typeRecomendation];
 
   return (
-    <div className="mealsContainer">
+    <div className="foodContainer">
       <h3 data-testid="recipe-title">{ detailsAPI[title] }</h3>
       <img
         data-testid="recipe-photo"
