@@ -36,9 +36,9 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     const fetchAPI = async () => {
       const response = await fetch(urlDetails);
       const json = await response.json();
-      return json[identRecipe][0];
+      setDetailsAPI(json[identRecipe][0]);
     };
-    setDetailsAPI(fetchAPI());
+    fetchAPI();
     const fetchRecomendation = async () => {
       const response = await fetch(urlRecommendation);
       const json = await response.json();
