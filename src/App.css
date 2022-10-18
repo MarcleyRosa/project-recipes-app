@@ -82,6 +82,7 @@
 .button-position {
   border: 2px solid #4caf50;
   bottom: 0;
+  left: 0;
   position: fixed;
 }
 
@@ -122,4 +123,10 @@
 
 label {
   margin-right: 5px;
+}
+
+.done-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }

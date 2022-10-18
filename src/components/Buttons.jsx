@@ -95,15 +95,33 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
 
 Buttons.propTypes = {
   linkCopy: PropTypes.string.isRequired,
-  route: PropTypes.bool,
-  indexData: PropTypes.func,
-  targetId: PropTypes.func,
+  route: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.func,
+  ]),
+  indexData: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.func,
+  ]),
+  targetId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
 };
 
 Buttons.defaultProps = {
-  targetId: PropTypes.func,
-  route: PropTypes.bool,
-  indexData: PropTypes.func,
+  targetId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
+  route: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.func,
+  ]),
+  indexData: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.func,
+  ]),
 };
 
 export default Buttons;

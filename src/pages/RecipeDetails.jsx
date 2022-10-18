@@ -36,15 +36,15 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     const fetchAPI = async () => {
       const response = await fetch(urlDetails);
       const json = await response.json();
-      setDetailsAPI(json[identRecipe][0]);
+      return json[identRecipe][0];
     };
-    fetchAPI();
+    setDetailsAPI(fetchAPI());
     const fetchRecomendation = async () => {
       const response = await fetch(urlRecommendation);
       const json = await response.json();
-      setRecommendation(json);
+      return json;
     };
-    fetchRecomendation();
+    setRecommendation(fetchRecomendation());
   }, [identRecipe, setDetailsAPI, urlDetails, urlRecommendation]);
 
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));

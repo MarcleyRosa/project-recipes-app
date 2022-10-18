@@ -12,6 +12,8 @@ const elementInput = 'search-input';
 const elementNameRadio = 'name-search-radio';
 const elementButton = 'exec-search-btn';
 
+window.alert = jest.fn();
+
 const mockValue = () => {
   jest.spyOn(global, 'fetch');
   global.fetch.mockResolvedValue({
@@ -60,6 +62,7 @@ describe('Testa a meals', () => {
 });
 describe('Testa meals', () => {
   test('Tela one meal', async () => {
+    window.alert.mockClear();
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(oneMeal).mockResolvedValueOnce(meals),

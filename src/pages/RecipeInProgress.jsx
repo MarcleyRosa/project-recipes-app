@@ -81,7 +81,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
   };
 
   return (
-    <div>
+    <div className="foodContainer">
       <p data-testid="recipe-title">
         { detailsAPI.strDrink || detailsAPI.strMeal }
       </p>
