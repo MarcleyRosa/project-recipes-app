@@ -42,9 +42,9 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     const fetchRecomendation = async () => {
       const response = await fetch(urlRecommendation);
       const json = await response.json();
-      return json;
+      setRecommendation(json);
     };
-    setRecommendation(fetchRecomendation());
+    fetchRecomendation();
   }, [identRecipe, setDetailsAPI, urlDetails, urlRecommendation]);
 
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
