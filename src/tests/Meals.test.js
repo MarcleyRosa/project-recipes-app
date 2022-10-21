@@ -97,16 +97,13 @@ describe('Testa o componente recipes', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
 
-    const beefElement = await screen.findByTestId('Vegetarian-category-filter');
+    const beefElement = screen.getByTestId('Vegetarian-category-filter');
     userEvent.click(beefElement);
+    await waitFor(() => expect(screen.getByText(/beef and mustard/i)));
     userEvent.click(beefElement);
+    await waitFor(() => expect(screen.getByText(/big mac/i)));
     const allButton = screen.getByTestId('All-category-filter');
     userEvent.click(allButton);
-    userEvent.click(beefElement);
-    const beefMealButton = await screen.findByText('Beef and Mustard Pie');
-    userEvent.click(beefMealButton);
-    const shareButton = screen.getByTestId('share-btn');
-    expect(shareButton).toBeInTheDocument();
   });
 });
 
@@ -154,11 +151,8 @@ describe('Testa o componente recipes', () => {
 
     const buttonShare = screen.getByTestId('0-horizontal-share-btn');
     userEvent.click(buttonShare);
+
     const buttonFilter = screen.getByRole('button', { name: /drinks/i });
-
     userEvent.click(buttonFilter);
-
-    history.push(path);
-    expect(startButton).not.toBeInTheDocument();
   });
 });

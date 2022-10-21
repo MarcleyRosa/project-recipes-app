@@ -59,7 +59,7 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
       const requestFavorite = arrayFavorite
         .filter((fav) => +fav.id !== (+ids || +targetId));
       setArrayFavorite(requestFavorite);
-    } else if (favoriteRecipe.id) {
+    } else {
       setArrayFavorite((prevState) => [...prevState, favoriteRecipe]);
     }
     if (arrayFavorite.length === 1) {
