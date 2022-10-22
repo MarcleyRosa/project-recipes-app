@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -10,6 +9,7 @@ function SearchBar({ domain, typeAPI }) {
     targetCategory, setTargetCategory } = useContext(RecipesContext);
 
   const [nameSearch, setNameSearch] = useState('');
+  const [change, setChange] = useState(false);
   const history = useHistory();
 
   const nameFirstLetter = nameSearch === 'first-letter';
@@ -28,27 +28,34 @@ function SearchBar({ domain, typeAPI }) {
       break;
     default: break;
     }
-  }, [nameSearch]);
+  }, [nameSearch, domain, setUrlSelect]);
 
   useEffect(() => {
-    setTargetCategory('');
-    const fetchApi = async () => {
-      if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
-        const response = await fetch(`${urlSelect}${searchInput}`);
-        const json = await response.json();
-        if (json?.meals || json?.drinks) setRequestAPI(json);
-        else global.alert('Sorry, we haven\'t found any recipes for these filters.');
-      }
-    };
-    fetchApi();
+    setChange(true);
   }, [isRequest]);
+
+  useEffect(() => {
+    if (change) {
+      setTargetCategory('');
+      const fetchApi = async () => {
+        setChange(false);
+        if ((nameSearch.length || urlSelect.length) && !firstLetterLength) {
+          const response = await fetch(`${urlSelect}${searchInput}`);
+          const json = await response.json();
+          if (json?.meals || json?.drinks) setRequestAPI(json);
+          else global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        }
+      };
+      fetchApi();
+    }
+  });
 
   useEffect(() => {
     if (requestAPI[typeAPI]?.length === 1 && !targetCategory) {
       const ids = typeAPI === 'meals' ? 'idMeal' : 'idDrink';
       history.push(`/${typeAPI}/${requestAPI[typeAPI][0][ids]}`);
     }
-  }, [requestAPI, targetCategory]);
+  }, [requestAPI, targetCategory, history, typeAPI]);
 
   const handleClick = () => {
     if (nameFirstLetter && searchInput.length > 1) {
@@ -60,7 +67,6 @@ function SearchBar({ domain, typeAPI }) {
   return (
     <div>
       <label htmlFor="ingredient">
-        Ingredient
         <input
           id="ingredient"
           type="radio"
@@ -69,9 +75,9 @@ function SearchBar({ domain, typeAPI }) {
           value="ingredient"
           onClick={ ({ target: { value } }) => setNameSearch(value) }
         />
+        Ingredient
       </label>
       <label htmlFor="name">
-        Name
         <input
           id="name"
           type="radio"
@@ -80,9 +86,9 @@ function SearchBar({ domain, typeAPI }) {
           value="name"
           onClick={ ({ target: { value } }) => setNameSearch(value) }
         />
+        Name
       </label>
       <label htmlFor="first-letter">
-        First letter
         <input
           id="first-letter"
           type="radio"
@@ -91,6 +97,7 @@ function SearchBar({ domain, typeAPI }) {
           value="first-letter"
           onClick={ ({ target: { value } }) => setNameSearch(value) }
         />
+        First letter
       </label>
       <button
         type="button"

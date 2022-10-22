@@ -50,7 +50,7 @@ function FavoriteRecipes() {
       </button>
 
       {filters?.map((rec, index) => (
-        <div key={ index }>
+        <div className="done-container" key={ index }>
           <Link to={ `/${rec.type}s/${rec.id}` }>
             <img
               src={ rec.image }

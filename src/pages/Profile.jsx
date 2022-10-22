@@ -16,7 +16,7 @@ function Profile({ history }) {
   };
 
   return (
-    <div>
+    <div className="done-container">
       <Header headers={ title } isRoute={ false } />
       <h3 data-testid="profile-email">
         {emailResult}

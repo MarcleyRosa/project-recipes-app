@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import '../App.css';
@@ -10,6 +9,7 @@ import requestLocalStorage from '../tests/helpers/requestLocalStorage';
 function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const { detailsAPI, setDetailsAPI } = useContext(RecipesContext);
   const [recommendation, setRecommendation] = useState([]);
+  const [change, setChange] = useState(false);
   const [requestInProgress,
     setRequestInProgress] = useState(requestLocalStorage());
 
@@ -45,7 +45,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
       setRecommendation(json);
     };
     fetchRecomendation();
-  }, []);
+  }, [identRecipe, setDetailsAPI, urlDetails, urlRecommendation]);
 
   const localStorageDone = JSON.parse(localStorage.getItem('doneRecipes'));
 
@@ -66,6 +66,11 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
     .filter((ev) => ev[1]?.length).map((elem) => elem[1]);
 
   useEffect(() => {
+    setChange(true);
+  }, [detailsAPI]);
+
+  const newChange = () => {
+    setChange(false);
     const prevIds = requestInProgress[identRecipe];
     if (requestInProgress && detailsAPI[idRecipe]) {
       setRequestInProgress((prevState) => (
@@ -73,7 +78,13 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
           [identRecipe]: { ...prevIds,
             [detailsAPI[idRecipe]]: ingredients } }));
     }
-  }, [detailsAPI]);
+  };
+
+  useEffect(() => {
+    if (change) {
+      newChange();
+    }
+  });
 
   const handleClickStart = () => {
     localStorage.setItem('inProgressRecipes', JSON.stringify(requestInProgress));
@@ -84,7 +95,7 @@ function RecipeDetails({ history, match: { url, path, params: { id } } }) {
   const choisen = recommendation[typeRecomendation];
 
   return (
-    <div className="mealsContainer">
+    <div className="foodContainer">
       <h3 data-testid="recipe-title">{ detailsAPI[title] }</h3>
       <img
         data-testid="recipe-photo"

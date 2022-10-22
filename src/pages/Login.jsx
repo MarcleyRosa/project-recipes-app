@@ -28,8 +28,9 @@ function Login() {
   }, [inputEmail, inputPassword]);
 
   return (
-    <div>
-      <label htmlFor="email">
+    <div className="login-container">
+      <p className="login-title">iCook</p>
+      <label className="login-label" htmlFor="email">
         Email
         <input
           value={ inputEmail }
@@ -40,7 +41,7 @@ function Login() {
         />
       </label>
 
-      <label htmlFor="password">
+      <label className="login-label" htmlFor="password">
         Senha
         <input
           value={ inputPassword }

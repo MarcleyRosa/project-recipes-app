@@ -56,7 +56,7 @@ function DoneRecipes() {
       </button>
 
       {filter?.map((rec, index) => (
-        <div key={ index }>
+        <div key={ index } className="done-container">
           <p data-testid={ `${index}-horizontal-top-text` }>
             { rec.type === 'meal'
               ? `${rec.nationality} - ${rec.category}`

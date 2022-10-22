@@ -75,6 +75,6 @@ describe('Testa o componente recipes', () => {
     userEvent.click(screen.getByTestId('finish-recipe-btn'));
     expect(history.location.pathname).toBe('/done-recipes');
     history.push('/drinks/178319');
-    expect(startButton).not.toBeInTheDocument();
+    await waitFor(() => expect(startButton).not.toBeInTheDocument());
   });
 });

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -41,10 +40,9 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
 
   const routeShare = `${[detailsAPI[`id${domain}`]]}${[typeRec]}`;
 
-  const shareClick = ({ target }) => {
+  const shareClick = () => {
     copy(`http://localhost:3000${linkCopy}`);
     setIsShare(true);
-    console.log(target);
   };
 
   useEffect(() => {
@@ -54,14 +52,14 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
       setIsFavorite(arrayFavorite?.some((fav) => +fav.id === +ids));
     }
     localStorage.setItem('favoriteRecipes', JSON.stringify(arrayFavorite));
-  }, [arrayFavorite]);
+  }, [arrayFavorite, ids, routeFav]);
 
   const favoriteClick = () => {
     if ((isFavorite && favoriteRecipe.id) || routeFav) {
       const requestFavorite = arrayFavorite
         .filter((fav) => +fav.id !== (+ids || +targetId));
       setArrayFavorite(requestFavorite);
-    } else if (favoriteRecipe.id) {
+    } else {
       setArrayFavorite((prevState) => [...prevState, favoriteRecipe]);
     }
     if (arrayFavorite.length === 1) {
@@ -97,15 +95,33 @@ function Buttons({ linkCopy, route, indexData, targetId }) {
 
 Buttons.propTypes = {
   linkCopy: PropTypes.string.isRequired,
-  route: PropTypes.bool,
-  indexData: PropTypes.func,
-  targetId: PropTypes.func,
+  route: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.func,
+  ]),
+  indexData: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.func,
+  ]),
+  targetId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
 };
 
 Buttons.defaultProps = {
-  targetId: PropTypes.func,
-  route: PropTypes.bool,
-  indexData: PropTypes.func,
+  targetId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
+  route: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.func,
+  ]),
+  indexData: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.func,
+  ]),
 };
 
 export default Buttons;

@@ -65,7 +65,6 @@ describe('Testa a aplicação', () => {
     userEvent.click(buttonFilterDrinks);
     const buttonAll = screen.getByRole('button', { name: /all/i });
     userEvent.click(buttonAll);
-    /* expect(favoriteRecipe).not.toBeInTheDocument(); */
   });
   test('Favorite Drinks', () => {
     jest.spyOn(localStorage, 'setItem');
