@@ -75,7 +75,7 @@ function RecipeInProgress({ history, match: { path, params: { id } } }) {
       link: urlCopy,
     };
     const getStorage = JSON.parse(localStorage.getItem('doneRecipes'));
-    const enterStorage = getStorage === null || undefined ? [] : getStorage;
+    const enterStorage = getStorage === null ? [] : getStorage;
     localStorage.setItem('doneRecipes', JSON.stringify([...enterStorage, newObj]));
     history.push('/done-recipes');
   };

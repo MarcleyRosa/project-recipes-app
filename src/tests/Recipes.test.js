@@ -1,32 +1,39 @@
-/* import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderPath from './helpers/renderWith'; */
+import renderPath from './helpers/renderWith';
+
+const fakeRecipe = {
+  id: '55428',
+  type: 'meal',
+  nationality: 'Brazilian',
+  category: 'Beef',
+  alcoholicOrNot: '',
+  name: 'Prime Rib',
+  image: '',
+  doneDate: '',
+  tags: [],
+  link: '',
+};
+localStorage.setItem('doneRecipes', JSON.stringify([fakeRecipe]));
 
 describe('Testa os requisitos finais', () => {
   test('Acessa os botões', async () => {
-    /* const { history } = renderPath('/meals');
-    await waitFor(() => expect(screen.getByText(/corba/i)).toBeInTheDocument(), { timeout: 10000 });
-    const corba = screen.getByTestId('0-card-img');
-    userEvent.click(corba);
-    const details = screen.getByTestId('instructions');
-    await waitFor(() => expect(details.innerHTML).not.toBe(''), { timeout: 10000 });
-    const favorite = screen.getByTestId('favorite-btn');
-    userEvent.click(favorite);
-    history.push('/meals');
-    const toDrinks = screen.getByTestId('drinks-bottom-btn');
-    userEvent.click(toDrinks);
-    /* const loucura = screen.getByText('hemos');
-    const drinkContainer = screen.getByTestId('instructions');
-    await waitFor(() => expect(details.innerHTML).not.toBe(''), { timeout: 10000 });
-    /* const ordinary = screen.getByTestId('Ordinary Drink-category-filter');
-    await waitFor(() => expect(screen.getByTestId('Ordinary Drink-category-filter')).toBeInTheDocument(), { timeout: 10000 });
+    renderPath('/drinks');
+    await waitFor(() => expect(screen.getByText('A1')).toBeInTheDocument(), { timeout: 10000 });
+    const btnName = screen.getByTestId('name-search-radio');
+    userEvent.click(btnName);
     const buttons = screen.getAllByRole('button');
-    expect(ordinaryDrink).toBeInTheDocument();
-    userEvent.click(ordinaryDrink);
-    const links = screen.getAllByRole('link');
-    userEvent.click(links[0]);
-    userEvent.click(screen.getByRole('button', { name: 'Favorite Recipes' }));
-    console.log(history);
-    console.log(localStorage.getItem('favoriteRecipes')); */
+    userEvent.click(buttons[0]);
+    const text = screen.getByTestId('search-input');
+    userEvent.type(text, 'A1');
+    userEvent.click(buttons[1]);
+    await waitFor(() => expect(screen.getByText(/start/i)).toBeInTheDocument(), { timeout: 10000 });
+    userEvent.click(screen.getByRole('button', { name: 'Start Recipe' }));
+    await waitFor(() => expect(screen.getByTestId('0-ingredient-step')).toBeInTheDocument(), { timeout: 10000 });
+    const checkboxes = screen.getAllByRole('checkbox');
+    checkboxes.forEach((ele, ind) => {
+      userEvent.click(checkboxes[ind]);
+    });
+    userEvent.click(screen.getByRole('button', { name: 'Finalizar Receita' }));
   });
 });
